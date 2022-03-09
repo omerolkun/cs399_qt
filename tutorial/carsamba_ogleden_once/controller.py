@@ -8,10 +8,10 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         super(ModiWindow,self).__init__()
         self.setupUi(self)
 
-        self.lat1.setValidator( QtGui.QIntValidator(0,90,self) )
-        self.lon1.setValidator( QtGui.QIntValidator(0,180,self) )
-        self.lat1.setValidator( QtGui.QIntValidator(0,90,self) )
-        self.lat1.setValidator( QtGui.QIntValidator(0,180,self) )
+        self.lat1.setValidator( QtGui.QIntValidator(-90,90,self) )
+        self.lon1.setValidator( QtGui.QIntValidator(-180,180,self) )
+        self.lat1.setValidator( QtGui.QIntValidator(-90,90,self) )
+        self.lat1.setValidator( QtGui.QIntValidator(-180,180,self) )
 
         #Point variables as tuple
         
