@@ -2,7 +2,7 @@ import sys
 from PySide2 import QtWidgets,QtGui
 from ui import Ui_MainWindow
 import math
-
+from haver import find_bearing
 class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def __init__(self):
         super(ModiWindow,self).__init__()
@@ -13,9 +13,14 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.lat1.setValidator( QtGui.QIntValidator(0,90,self) )
         self.lat1.setValidator( QtGui.QIntValidator(0,180,self) )
 
+        #Point variables as tuple
+        
 
         self.calculate_button.clicked.connect(self.display_distance)
-        self.calculate_button.clicked.connect(self.find_bearing)
+        self.calculate_button.clicked.connect(self.find_bearing1)
+        self.calculate_button.clicked.connect(self.find_final_bearing)
+
+        print("heyy")
         
 
     def display_distance(self):
@@ -53,7 +58,7 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.label_2.setText(str(round(result/1000,0)))
         
     
-    def find_bearing(self):
+    def find_bearing1(self):
         lat1 = int(self.lat1.text()) * math.pi / 180
         lon1 = int(self.lon1.text()) * math.pi / 180
         lat2 = int(self.lat2.text()) * math.pi / 180
@@ -80,7 +85,24 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         self.label_value_azamith.setText(str(dms_azamith))
 
-        
+    def find_final_bearing(self):
+        pass
+        #print(self.point1[0])
+        #print("omers")
+        point1 = int(self.lat1.text()) , int(self.lon1.text())
+        point2 = int(self.lat2.text()) , int(self.lon2.text())
+        result = find_bearing(point2, point1)
+
+        result_temp  = list(result)
+        result_temp[0] = (result_temp[0] + 180) % 360
+        result = tuple(result_temp)
+        #return result
+        print(result[0])
+        print(result[1])
+        print(result[2])
+        degree_sign = u"\N{DEGREE SIGN}"
+        final_bear = str(result[0]) + degree_sign + str(result[1]) + "\'" + str(result[2]) + "\'\'"
+        self.final_bearing_label.setText(final_bear)
 
 
 
