@@ -14,10 +14,11 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.lat1.setValidator( QtGui.QIntValidator(0,180,self) )
 
 
-        self.calculate_button.clicked.connect(self.display)
+        self.calculate_button.clicked.connect(self.display_distance)
+        self.calculate_button.clicked.connect(self.find_bearing)
         
 
-    def display(self):
+    def display_distance(self):
         R = 6371000 # in meters   radius of earth
         lat1 = int(self.lat1.text())
         lon1 = int(self.lon1.text())
@@ -51,6 +52,36 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         
         self.label_2.setText(str(round(result/1000,0)))
         
+    
+    def find_bearing(self):
+        lat1 = int(self.lat1.text()) * math.pi / 180
+        lon1 = int(self.lon1.text()) * math.pi / 180
+        lat2 = int(self.lat2.text()) * math.pi / 180
+        lon2 = int(self.lon2.text()) * math.pi / 180
+
+        dif_of_lons = (lon2 - lon1)
+        x = math.cos(lat1) * math.sin(lat2) - (math.sin(lat1) * math.cos(lat2) * math.cos(dif_of_lons))
+        y = math.sin(dif_of_lons) * math.cos(lat2)
+
+        #formula
+        teta = math.atan2(y,x)
+
+        result = (teta * 180 / math.pi + 360 ) % 360 # converting to degree in this final step
+
+        degree = int(result)
+        (minute_temp )= (result - (degree)) * 60
+        minute = int(minute_temp)
+        (seconds) = int((minute_temp-minute) * 60)
+        
+        dms_azamith =   (degree,minute,seconds)
+        
+        degree_sign = u"\N{DEGREE SIGN}"
+        dms_azamith = str(degree ) + degree_sign + " " + str(minute) + "\'" + str(seconds) + "\'\'"
+
+        self.label_value_azamith.setText(str(dms_azamith))
+
+        
+
 
 
 
