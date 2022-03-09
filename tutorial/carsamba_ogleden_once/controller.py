@@ -2,7 +2,7 @@ import sys
 from PySide2 import QtWidgets,QtGui
 from ui import Ui_MainWindow
 import math
-from haver import find_bearing
+from haver import convert_to_radian, find_bearing, radian_to_degree, dd_to_dms
 class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def __init__(self):
         super(ModiWindow,self).__init__()
@@ -19,6 +19,7 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.calculate_button.clicked.connect(self.display_distance)
         self.calculate_button.clicked.connect(self.find_bearing1)
         self.calculate_button.clicked.connect(self.find_final_bearing)
+        self.calculate_button.clicked.connect(self.calculate_midpoint)
 
         print("heyy")
         
@@ -105,8 +106,48 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.final_bearing_label.setText(final_bear)
 
 
+    def calculate_midpoint(self):
+        lat1 = float(self.lat1.text())
+        lon1 = float(self.lon1.text())
+        lat2 = float(self.lat2.text())
+        lon2 = float(self.lon2.text())
+
+        phi_1 = convert_to_radian(lat1)
+        lam_1 = convert_to_radian(lon1)
+        phi_2 = convert_to_radian(lat2)
+        lam_2 = convert_to_radian(lon2)
+
+        bx = math.cos(phi_2) * math.cos(lam_2- lam_1)
+        by = math.cos(phi_2) * math.sin(lam_2-lam_1)
+        
+        phi_3 = math.atan2 ( math.sin(phi_1) + math.sin(phi_2) , math.sqrt ( (math.cos(phi_1) + bx) * (math.cos(phi_1) + bx ) + by * by))
+        lam_3 = lam_1 + math.atan2(by , math.cos(phi_1) + bx)
+
+        deg_lat =round( radian_to_degree(phi_3),3)
+        deg_lon = round(radian_to_degree(lam_3),3)
+        deg_lon = (deg_lon+540)%360-180
 
 
+        if deg_lat < 0:
+            pole = "S"
+            dms_lat = dd_to_dms(-deg_lat)
+        else:
+            pole = "N"
+            dms_lat = dd_to_dms(deg_lat)
+
+        if deg_lon < 0:
+            direction = "W"
+            dms_lon = dd_to_dms(-deg_lon)
+        else:
+            direction = "E"
+            dms_lon = dd_to_dms(deg_lon)
+        
+        result_lat = dms_lat,pole
+        result_lon = dms_lon,direction
+
+        print ("midpoint is ",result_lat)
+
+        
 app = QtWidgets.QApplication(sys.argv)
 window = ModiWindow()
 window.show()
