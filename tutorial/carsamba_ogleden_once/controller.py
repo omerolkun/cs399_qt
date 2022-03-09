@@ -49,6 +49,7 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         #return result
         print (round(result/1000,0))
         
+        self.label_2.setText(str(round(result/1000,0)))
         
 
 
