@@ -119,8 +119,8 @@ def find_bearing(point1, point2): #parameters elements are in dd format
     result = (teta * 180 / math.pi + 360 ) % 360 # converting to degree in this final step
     fbear = (teta*180/math.pi + 180)%360
     #print("the bearing is ",result)
-    
-    
+    dms_version_bearing = dd_to_dms(result)
+    #print(dms_version_bearing)
     return dd_to_dms(result) 
 
 
@@ -149,8 +149,7 @@ def calculate_midpoint(point1, point2):
     deg_lon = round(radian_to_degree(lam_3),3)
     deg_lon = (deg_lon+540)%360-180
     
-    print("deg lat mid point : ",deg_lat)
-    print("deg lon mid point:  ",deg_lon)
+
 
     if deg_lat < 0:
         pole = "S"
