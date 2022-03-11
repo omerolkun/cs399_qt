@@ -3,7 +3,7 @@ from tokenize import Double
 from PySide2 import QtWidgets,QtGui
 from ui import Ui_MainWindow
 import math
-from haver import calculate_midpoint, convert_to_radian, find_bearing, radian_to_degree, dd_to_dms, calculate_distance,final_bearing, calculate_distance_tab2,calculate_azamith_tab2
+from haver import calculate_midpoint, convert_to_radian, find_bearing, radian_to_degree, dd_to_dms, calculate_distance,final_bearing, calculate_distance_tab2,calculate_azamith_tab2,calculate_final_bearing_tab2
 from dest_and_final_bearing import find_destination_point
 class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def __init__(self):
@@ -61,6 +61,7 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         #buttons for tab2
         self.calculate_button_tab2.clicked.connect(self.display_distance_tab2)
         self.calculate_button_tab2.clicked.connect(self.display_azamith_tab2)
+        self.calculate_button_tab2.clicked.connect(self.display_final_bearing_tab2)
         
         
 
@@ -226,6 +227,29 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         print("azamith is ",azamith)
         self.bearing_value_label.setText(str(azamith))
 
+
+
+    def display_final_bearing_tab2(self):
+        lat1_deg = float(self.lat1_deg_lineedit.text())
+        lat1_min = float(self.lat1_min_lineedit.text())
+        lat1_sec = float(self.lat1_sec_lineedit.text())
+        lon1_deg = float(self.lon1_deg_lineedit.text())
+        lon1_min = float(self.lon1_min_lineedit.text())
+        lon1_sec = float(self.lon1_sec_lineedit.text())
+        lat2_deg = float(self.lat2_deg_lineedit.text())
+        lat2_min = float(self.lat2_min_lineedit.text())
+        lat2_sec = float(self.lat2_sec_lineedit.text())
+        lon2_deg = float(self.lon2_deg_lineedit.text())
+        lon2_min = float(self.lon2_min_lineedit.text())
+        lon2_sec = float(self.lon2_sec_lineedit.text())
+
+        lat1_pole = str(self.lat1_pole_lineedit.text())
+        lon1_dir = str(self.lon1_direction_lineedit.text())
+        lat2_pole = str(self.lat2_pole_lineedit.text())
+        lon2_dir = str(self.lon2_direction_lineedit.text())
+
+        result = calculate_final_bearing_tab2(lat1_deg, lat1_min,lat1_sec,lon1_deg,lon1_min,lon1_sec,lat2_deg,lat2_min,lat2_sec,lon2_deg,lon2_min,lon2_sec,lat1_pole,lon1_dir,lat2_pole,lon2_dir)
+        self.final_bearing_value_tab2_label.setText(str(result))
 app = QtWidgets.QApplication(sys.argv)
 window = ModiWindow()
 window.show()
