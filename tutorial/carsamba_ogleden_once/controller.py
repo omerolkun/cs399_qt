@@ -4,7 +4,7 @@ from PySide2 import QtWidgets,QtGui
 from ui import Ui_MainWindow
 import math
 from haver import calculate_midpoint, convert_to_radian, find_bearing, radian_to_degree, dd_to_dms, calculate_distance,final_bearing, calculate_distance_tab2,calculate_azamith_tab2,calculate_final_bearing_tab2,calculate_mid_point_tab2
-from dest_and_final_bearing import find_destination_point
+from dest_and_final_bearing import calculate_destinaion_point, find_destination_point
 class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def __init__(self):
         super(ModiWindow,self).__init__()
@@ -23,7 +23,7 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.lat2.setValidator( lat_validator )
         self.lon2.setValidator( lon_validator )
 
-        #validator for tab2 is lineedits
+        #validator for tab2 is lineedits - first part
         lat_deg_validator = QtGui.QDoubleValidator(0,90,4)
         lat_deg_validator.setNotation(QtGui.QDoubleValidator.StandardNotation)
         min_validator = QtGui.QDoubleValidator(0,60,4)
@@ -33,7 +33,7 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         lon_deg_validator = QtGui.QDoubleValidator(0,180,4)
         lon_deg_validator.setNotation(QtGui.QDoubleValidator.StandardNotation)
         
-        #set validators for lineedit inputs
+        #set validators for lineedit inputs - first part
         self.lat1_deg_lineedit.setValidator( lat_deg_validator)
         self.lat1_min_lineedit.setValidator( min_validator )
         self.lat1_sec_lineedit.setValidator( sec_validator )
@@ -46,6 +46,17 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.lon2_deg_lineedit.setValidator( lon_deg_validator )
         self.lon2_min_lineedit.setValidator( min_validator )
         self.lon2_sec_lineedit.setValidator( sec_validator )
+
+        #set validators for lineedit inputs - second part 
+        self.startpoint_lat_deg_lineedit_tab2.setValidator(lat_deg_validator)
+        self.startpoint_lat_min_lineedit_tab2.setValidator(min_validator)
+        self.startpoint_lat_min_lineedit_tab2.setValidator(sec_validator)
+        self.startpoint_lon_deg_lineedit_tab2.setValidator(lon_deg_validator)
+        self.startpoint_lon_min_lineedit_tab2.setValidator(min_validator)
+        self.startpoint_lon_sec_lineedit_tab2.setValidator(sec_validator)
+
+
+
 
         
         
@@ -63,6 +74,7 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.calculate_button_tab2.clicked.connect(self.display_azamith_tab2)
         self.calculate_button_tab2.clicked.connect(self.display_final_bearing_tab2)
         self.calculate_button_tab2.clicked.connect(self.display_midpoint_tab2)
+        self.calculate_button_destination_point_tab2.clicked.connect(self.display_endpoint_and_bearing_tab2)
         
 
     #functions for tab1
@@ -290,6 +302,43 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         
     
         self.midpoint_value_label_tab2.setText(str(result))
+
+    
+
+    def display_endpoint_and_bearing_tab2(self):
+        degree_sign = u"\N{DEGREE SIGN}"
+
+        lat_deg = float(self.startpoint_lat_deg_lineedit_tab2.text())
+        lat_min = float(self.startpoint_lat_min_lineedit_tab2.text())
+        lat_sec = float(self.startpoint_lat_sec_lineedit_tab2.text())
+        lat_pole = str(self.startpoint_lat_pole_lineedit_tab2.text())
+        lon_deg = float(self.startpoint_lon_deg_lineedit_tab2.text())
+        lon_min = float(self.startpoint_lon_min_lineedit_tab2.text())
+        lon_sec = float(self.startpoint_lon_sec_lineedit_tab2.text())
+        lon_dir = str(self.startpoint_dir_lineedit_tab2.text())
+
+        distance = float(self.distance_lineedit_tab2.text())
+        
+        b_deg = float(self.bearing_deg_lineedit_tab2.text())
+        b_min = float(self.bearing_min_lineedit_tab2.text())
+        b_sec = float(self.bearing_sec_lineedit_tab2.text())
+        result = calculate_destinaion_point(lat_deg, lat_min,lat_sec, lat_pole,lon_deg,lon_min,lon_sec,lon_dir,distance,b_deg,b_min,b_sec)
+        dest_lag_deg = result[0][0][0][0]
+        dest_lag_min = result[0][0][0][1]
+        dest_lag_sec = result[0][0][0][2]
+        dest_pole = result[0][0][1]
+        dest_lon_deg = result[0][1][0][0]
+        dest_lon_min = result[0][1][0][1]
+        dest_lon_sec = result [0][1][0][2]
+        dest_dir = result[0][1][1]
+        fbearing_deg = result[1][0]
+        fbearing_min = result[1][1]
+        fbearing_sec = result[1][2]
+        destination_point = str(dest_lag_deg)+degree_sign+" "+str(dest_lag_min)+"\' " + str(dest_lag_sec)+" \'\' " + dest_pole + "  "+str(dest_lon_deg)+degree_sign+" "+str(dest_lon_min)+"\' "+str(dest_lon_sec)+"\'\' " + dest_dir
+        fbearing = str(fbearing_deg)+degree_sign + " "+ str(fbearing_min)+"\' "+str(fbearing_sec)+"\'\'"
+
+        self.destination_label_value_tab2.setText(destination_point)
+        self.final_bearing_value_label_lab2.setText(fbearing)
 
 app = QtWidgets.QApplication(sys.argv)
 window = ModiWindow()
