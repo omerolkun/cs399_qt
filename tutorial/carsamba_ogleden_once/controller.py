@@ -3,7 +3,7 @@ from tokenize import Double
 from PySide2 import QtWidgets,QtGui
 from ui import Ui_MainWindow
 import math
-from haver import calculate_midpoint, convert_to_radian, find_bearing, radian_to_degree, dd_to_dms, calculate_distance,final_bearing, calculate_distance_tab2
+from haver import calculate_midpoint, convert_to_radian, find_bearing, radian_to_degree, dd_to_dms, calculate_distance,final_bearing, calculate_distance_tab2,calculate_azamith_tab2
 from dest_and_final_bearing import find_destination_point
 class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def __init__(self):
@@ -11,25 +11,46 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.setupUi(self)
 
 
-        #validator for lat
+        #validator for lat and lon for tab1's inputs 
         lat_validator = QtGui.QDoubleValidator(-90,90,4)
         lat_validator.setNotation(QtGui.QDoubleValidator.StandardNotation)
         lon_validator = QtGui.QDoubleValidator(-180,180,8)
         lon_validator.setNotation(QtGui.QDoubleValidator.StandardNotation)
-        self.lon1.setMaxLength(100)
+        
+        #set validators for lineedit inputs 
         self.lat1.setValidator( lat_validator)
         self.lon1.setValidator( lon_validator )
         self.lat2.setValidator( lat_validator )
         self.lon2.setValidator( lon_validator )
 
-        #print(lon_validator.validate("1.444444",0))
+        #validator for tab2 is lineedits
+        lat_deg_validator = QtGui.QDoubleValidator(0,90,4)
+        lat_deg_validator.setNotation(QtGui.QDoubleValidator.StandardNotation)
+        min_validator = QtGui.QDoubleValidator(0,60,4)
+        min_validator.setNotation(QtGui.QDoubleValidator.StandardNotation)
+        sec_validator = QtGui.QDoubleValidator(0,60,4)
+        sec_validator.setNotation(QtGui.QDoubleValidator.StandardNotation)
+        lon_deg_validator = QtGui.QDoubleValidator(0,180,4)
+        lon_deg_validator.setNotation(QtGui.QDoubleValidator.StandardNotation)
+        
+        #set validators for lineedit inputs
+        self.lat1_deg_lineedit.setValidator( lat_deg_validator)
+        self.lat1_min_lineedit.setValidator( min_validator )
+        self.lat1_sec_lineedit.setValidator( sec_validator )
+        self.lon1_deg_lineedit.setValidator( lon_deg_validator)
+        self.lon1_min_lineedit.setValidator( min_validator )
+        self.lon1_sec_lineedit.setValidator( sec_validator )
+        self.lat2_deg_lineedit.setValidator( lat_deg_validator )
+        self.lat2_min_lineedit.setValidator( min_validator )
+        self.lat2_sec_lineedit.setValidator( sec_validator )
+        self.lon2_deg_lineedit.setValidator( lon_deg_validator )
+        self.lon2_min_lineedit.setValidator( min_validator )
+        self.lon2_sec_lineedit.setValidator( sec_validator )
 
-
-        #Point variables as tuple
+        
         
 
-        #self.calculate_button.clicked.connect(self.display_distance)
-        
+                
         #buttons for tab1
         self.calculate_button.clicked.connect(self.find_distance)
         self.calculate_button.clicked.connect(self.find_azamith)
@@ -38,8 +59,10 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.calculate_dest_bearing_button.clicked.connect(self.calculate_destination_point)
         
         #buttons for tab2
-
-        self.calculate_dist_tab2.clicked.connect(self.display_distance_tab2)
+        self.calculate_button_tab2.clicked.connect(self.display_distance_tab2)
+        self.calculate_button_tab2.clicked.connect(self.display_azamith_tab2)
+        
+        
 
     #functions for tab1
     def find_distance(self):
@@ -156,21 +179,52 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
 
     def display_distance_tab2(self):
-        lat1_deg = float(self.lat1_deg_lineedit)
-        lat1_min = float(self.lat1_min_lineedit)
-        lat1_sec = float(self.lat1_sec_lineedit)
-        lon1_deg = float(self.lon1_deg_lineedit)
-        lon1_min = float(self.lon1_min_lineedit)
-        lon1_sec = float(self.lon1_sec_lineedit)
-        lat2_deg = float(self.lat2_deg_lineedit)
-        lat2_min = float(self.lat2_min_lineedit)
-        lat2_sec = float(self.lat2_sec_lineedit)
-        lon2_deg = float(self.lon2_deg_lineedit)
-        lon2_min = float(self.lon2_min_lineedit)
-        lon2_sec = float(self.lon2_sec_lineedit)
+        lat1_deg = float(self.lat1_deg_lineedit.text())
+        lat1_min = float(self.lat1_min_lineedit.text())
+        lat1_sec = float(self.lat1_sec_lineedit.text())
+        lon1_deg = float(self.lon1_deg_lineedit.text())
+        lon1_min = float(self.lon1_min_lineedit.text())
+        lon1_sec = float(self.lon1_sec_lineedit.text())
+        lat2_deg = float(self.lat2_deg_lineedit.text())
+        lat2_min = float(self.lat2_min_lineedit.text())
+        lat2_sec = float(self.lat2_sec_lineedit.text())
+        lon2_deg = float(self.lon2_deg_lineedit.text())
+        lon2_min = float(self.lon2_min_lineedit.text())
+        lon2_sec = float(self.lon2_sec_lineedit.text())
 
-        distance = calculate_distance_tab2(lat1_deg,lat1_min,lat1_sec,lon1_deg,lon1_min,lon1_sec,lat2_deg,lat2_min,lat2_sec,lon2_deg,lon2_min,lon2_sec)
+        lat1_pole = str(self.lat1_pole_lineedit.text())
+        lon1_dir = str(self.lon1_direction_lineedit.text())
+        lat2_pole = str(self.lat2_pole_lineedit.text())
+        lon2_dir = str(self.lon2_direction_lineedit.text())
+
+        distance = calculate_distance_tab2(lat1_deg,lat1_min,lat1_sec,lon1_deg,lon1_min,lon1_sec,lat2_deg,lat2_min,lat2_sec,lon2_deg,lon2_min,lon2_sec,lat1_pole,lon1_dir,lat2_pole,lon2_dir)
         print(distance)
+
+        self.distance_value_label.setText(str(distance))
+
+
+    def display_azamith_tab2(self):
+        lat1_deg = float(self.lat1_deg_lineedit.text())
+        lat1_min = float(self.lat1_min_lineedit.text())
+        lat1_sec = float(self.lat1_sec_lineedit.text())
+        lon1_deg = float(self.lon1_deg_lineedit.text())
+        lon1_min = float(self.lon1_min_lineedit.text())
+        lon1_sec = float(self.lon1_sec_lineedit.text())
+        lat2_deg = float(self.lat2_deg_lineedit.text())
+        lat2_min = float(self.lat2_min_lineedit.text())
+        lat2_sec = float(self.lat2_sec_lineedit.text())
+        lon2_deg = float(self.lon2_deg_lineedit.text())
+        lon2_min = float(self.lon2_min_lineedit.text())
+        lon2_sec = float(self.lon2_sec_lineedit.text())
+
+        lat1_pole = str(self.lat1_pole_lineedit.text())
+        lon1_dir = str(self.lon1_direction_lineedit.text())
+        lat2_pole = str(self.lat2_pole_lineedit.text())
+        lon2_dir = str(self.lon2_direction_lineedit.text())
+
+        azamith = calculate_azamith_tab2(lat1_deg, lat1_min,lat1_sec,lon1_deg,lon1_min,lon1_sec,lat2_deg,lat2_min,lat2_sec,lon2_deg,lon2_min,lon2_sec,lat1_pole,lon1_dir,lat2_pole,lon2_dir)
+        print("azamith is ",azamith)
+        self.bearing_value_label.setText(str(azamith))
 
 app = QtWidgets.QApplication(sys.argv)
 window = ModiWindow()
