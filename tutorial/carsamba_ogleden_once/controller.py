@@ -3,36 +3,50 @@ from tokenize import Double
 from PySide2 import QtWidgets,QtGui
 from ui import Ui_MainWindow
 import math
-from haver import calculate_midpoint, convert_to_radian, find_bearing, radian_to_degree, dd_to_dms, calculate_distance,final_bearing
+from haver import calculate_midpoint, convert_to_radian, find_bearing, radian_to_degree, dd_to_dms, calculate_distance,final_bearing, calculate_distance_tab2
 from dest_and_final_bearing import find_destination_point
 class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def __init__(self):
         super(ModiWindow,self).__init__()
         self.setupUi(self)
 
-        self.lat1.setValidator( QtGui.QIntValidator(-90,90,self) )
-        self.lon1.setValidator( QtGui.QIntValidator(-180,180,self) )
-        self.lat1.setValidator( QtGui.QIntValidator(-90,90,self) )
-        self.lat1.setValidator( QtGui.QIntValidator(-180,180,self) )
+
+        #validator for lat
+        lat_validator = QtGui.QDoubleValidator(-90,90,4)
+        lat_validator.setNotation(QtGui.QDoubleValidator.StandardNotation)
+        lon_validator = QtGui.QDoubleValidator(-180,180,8)
+        lon_validator.setNotation(QtGui.QDoubleValidator.StandardNotation)
+        self.lon1.setMaxLength(100)
+        self.lat1.setValidator( lat_validator)
+        self.lon1.setValidator( lon_validator )
+        self.lat2.setValidator( lat_validator )
+        self.lon2.setValidator( lon_validator )
+
+        #print(lon_validator.validate("1.444444",0))
+
 
         #Point variables as tuple
         
 
         #self.calculate_button.clicked.connect(self.display_distance)
         
+        #buttons for tab1
         self.calculate_button.clicked.connect(self.find_distance)
         self.calculate_button.clicked.connect(self.find_azamith)
         self.calculate_button.clicked.connect(self.find_final_bearing)
         self.calculate_button.clicked.connect(self.find_midpoint)
-
-
         self.calculate_dest_bearing_button.clicked.connect(self.calculate_destination_point)
         
+        #buttons for tab2
+
+        self.calculate_dist_tab2.clicked.connect(self.display_distance_tab2)
+
+    #functions for tab1
     def find_distance(self):
-        lat1 = (int((self.lat1.text())))
-        lon1= int(self.lon1.text())
-        lat2 = int(self.lat2.text())
-        lon2 = int(self.lon2.text())
+        lat1 = (float((self.lat1.text())))
+        lon1= float(self.lon1.text())
+        lat2 = float(self.lat2.text())
+        lon2 = float(self.lon2.text())
 
         point1 = lat1, lon1
         point2 = lat2, lon2
@@ -47,10 +61,10 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         degree_sign = u"\N{DEGREE SIGN}"
 
         
-        lat1 = (int((self.lat1.text())))
-        lon1= int(self.lon1.text())
-        lat2 = int(self.lat2.text())
-        lon2 = int(self.lon2.text())
+        lat1 = (float((self.lat1.text())))
+        lon1= float(self.lon1.text())
+        lat2 = float(self.lat2.text())
+        lon2 = float(self.lon2.text())
 
         point1 = lat1, lon1
         point2 = lat2, lon2
@@ -68,10 +82,10 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     
     def find_final_bearing(self):
         degree_sign = u"\N{DEGREE SIGN}"
-        lat1 = (int((self.lat1.text())))
-        lon1= int(self.lon1.text())
-        lat2 = int(self.lat2.text())
-        lon2 = int(self.lon2.text())
+        lat1 = (float((self.lat1.text())))
+        lon1= float(self.lon1.text())
+        lat2 = float(self.lat2.text())
+        lon2 = float(self.lon2.text())
 
         point1 = lat1, lon1
         point2 = lat2, lon2
@@ -87,10 +101,10 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def find_midpoint(self):
         degree_sign = u"\N{DEGREE SIGN}"
         
-        lat1 = int(self.lat1.text())
-        lon1 = int(self.lon1.text())
-        lat2 = int(self.lat2.text())
-        lon2 = int(self.lon2.text())
+        lat1 = float(self.lat1.text())
+        lon1 = float(self.lon1.text())
+        lat2 = float(self.lat2.text())
+        lon2 = float(self.lon2.text())
 
         point1 = lat1, lon1
         point2 = lat2, lon2
@@ -136,7 +150,27 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.destination_point_value_label.setText(result_destination_point)
         self.final_bearing_value_label.setText(result_fbearing)
 
+    #functions for tab2
+    def foo(self):
+        self.distance_value_label.setText("omer")
 
+
+    def display_distance_tab2(self):
+        lat1_deg = float(self.lat1_deg_lineedit)
+        lat1_min = float(self.lat1_min_lineedit)
+        lat1_sec = float(self.lat1_sec_lineedit)
+        lon1_deg = float(self.lon1_deg_lineedit)
+        lon1_min = float(self.lon1_min_lineedit)
+        lon1_sec = float(self.lon1_sec_lineedit)
+        lat2_deg = float(self.lat2_deg_lineedit)
+        lat2_min = float(self.lat2_min_lineedit)
+        lat2_sec = float(self.lat2_sec_lineedit)
+        lon2_deg = float(self.lon2_deg_lineedit)
+        lon2_min = float(self.lon2_min_lineedit)
+        lon2_sec = float(self.lon2_sec_lineedit)
+
+        distance = calculate_distance_tab2(lat1_deg,lat1_min,lat1_sec,lon1_deg,lon1_min,lon1_sec,lat2_deg,lat2_min,lat2_sec,lon2_deg,lon2_min,lon2_sec)
+        print(distance)
 
 app = QtWidgets.QApplication(sys.argv)
 window = ModiWindow()
