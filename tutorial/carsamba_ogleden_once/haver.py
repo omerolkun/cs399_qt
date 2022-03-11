@@ -8,6 +8,62 @@ R = 6371000 # in meters
 
 
 
+# calculate distance in parameters dms , degree
+def calculate_distance_tab2(lat1_deg,lat1_min,lat1_sec,lon1_deg,lon1_min, lon1_sec,lat2_deg,lat2_min,lat2_sec, lon2_deg,lon2_min,lon2_sec,lat1_pole,lon1_dir,lat2_pole,lon2_dir):
+    lat1_dd = lat1_deg + (lat1_min/60) + (lat1_sec/3600)
+    lon1_dd = lon1_deg + (lon1_min/60) + (lon1_sec/3600)
+    
+    lat2_dd = lat2_deg + (lat2_min/60) + (lat2_sec/3600)
+    lon2_dd = lon2_deg + (lon2_min/60) + (lon2_sec/3600)
+
+    #it sets the negative possibilies of values for dd format
+    if lat1_pole == 'S' or lat1_pole == 's':
+        lat1_dd = -1 * lat1_dd
+    if lon1_dir == 'W' or lon1_dir == 'w':
+        lon1_dd = -1 * lon1_dd
+    if lat2_pole == 'S' or lat2_pole == 's':
+        lat2_dd = -1 * lat2_dd
+    if lon2_dir == 'W' or lon2_dir == 'w':
+        lon2_dd = -1 * lon2_dd
+
+    #final results for point1 and point2    
+    point1 = lat1_dd,lon1_dd
+    point2 = lat2_dd, lon2_dd
+
+
+
+    return calculate_distance(point1,point2)
+# inputs are in dms format
+def calculate_azamith_tab2(lat1_deg,lat1_min,lat1_sec,lon1_deg,lon1_min, lon1_sec,lat2_deg,lat2_min,lat2_sec, lon2_deg,lon2_min,lon2_sec,lat1_pole,lon1_dir,lat2_pole,lon2_dir):
+    lat1_dd = lat1_deg + (lat1_min/60) + (lat1_sec/3600)
+    lon1_dd = lon1_deg + (lon1_min/60) + (lon1_sec/3600)
+    lat2_dd = lat2_deg + (lat2_min/60) + (lat2_sec/3600)
+    lon2_dd = lon2_deg + (lon2_min/60) + (lon2_sec/3600)
+
+    #negative or not
+    if lat1_pole == 'S' or lat1_pole == 's':
+        lat1_dd = -1 * lat1_dd
+    if lon1_dir == 'W' or lon1_dir == 'w':
+        lon1_dd = -1 * lon1_dd
+    if lat2_pole == 'S' or lat2_pole == 's':
+        lat2_dd = -1 * lat2_dd
+    if lon2_dir == 'W' or lon2_dir == 'w':
+        lon2_dd = -1 * lon2_dd
+
+    #final results for point1 and point2    
+    point1 = lat1_dd,lon1_dd
+    point2 = lat2_dd, lon2_dd
+
+
+
+    point1 = lat1_dd,lon1_dd
+    point2 = lat2_dd, lon2_dd
+
+    result = find_bearing(point1,point2)    
+    return result
+
+
+
 # check the representation of the point. if the point is deg min sec ,the function return true
 def check_degminsec(point):
     
@@ -266,6 +322,14 @@ if __name__ == "__main__":
     lat2 = round(random.uniform(-90,90),3)
     lon2 = round(random.uniform(-180,180),3)
 
+
+
+
+
+
+
+
+
     point1 = lat1, lon1
     point2 = lat2, lon2
 
@@ -281,3 +345,11 @@ if __name__ == "__main__":
 
 
     print("Mid point is ", calculate_midpoint(point1,point2))
+
+
+
+
+
+    #print(calculate_distance_tab2(10,15,23,50,52,30,80,20,33,150,50,1))
+
+
