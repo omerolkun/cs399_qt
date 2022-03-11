@@ -90,6 +90,28 @@ def calculate_final_bearing_tab2(lat1_deg,lat1_min,lat1_sec,lon1_deg,lon1_min, l
     print(result)
     return result
 
+def calculate_mid_point_tab2(lat1_deg,lat1_min,lat1_sec,lon1_deg,lon1_min, lon1_sec,lat2_deg,lat2_min,lat2_sec, lon2_deg,lon2_min,lon2_sec,lat1_pole,lon1_dir,lat2_pole,lon2_dir):
+    lat1_dd = lat1_deg + (lat1_min/60) + (lat1_sec/3600)
+    lon1_dd = lon1_deg + (lon1_min/60) + (lon1_sec/3600)
+    lat2_dd = lat2_deg + (lat2_min/60) + (lat2_sec/3600)
+    lon2_dd = lon2_deg + (lon2_min/60) + (lon2_sec/3600)
+
+    #negative or not
+    if lat1_pole == 'S' or lat1_pole == 's':
+        lat1_dd = -1 * lat1_dd
+    if lon1_dir == 'W' or lon1_dir == 'w':
+        lon1_dd = -1 * lon1_dd
+    if lat2_pole == 'S' or lat2_pole == 's':
+        lat2_dd = -1 * lat2_dd
+    if lon2_dir == 'W' or lon2_dir == 'w':
+        lon2_dd = -1 * lon2_dd
+
+    #final results for point1 and point2    
+    point1 = lat1_dd,lon1_dd
+    point2 = lat2_dd, lon2_dd
+
+    result = calculate_midpoint(point1,point2)
+    return result
 
 #rest functions are not explicitly related to tab2 in qt 
 # check the representation of the point. if the point is deg min sec ,the function return true
