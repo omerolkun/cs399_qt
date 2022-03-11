@@ -12,6 +12,9 @@ lon2 = round(random.uniform(-180,180),4)
 distance = round(random.uniform(0,6000),0)
 bearing = round(random.uniform(0,180),0)
 '''
+
+
+
 #parameters are start point , inital bearing and distance (distance in km)
 def find_destination_point(start_point, distance, bearing):
     radius = 6371000 # the radius of earth in m
@@ -76,10 +79,24 @@ def find_destination_point(start_point, distance, bearing):
 
 
 
+#FOR TAB2
+def calculate_destinaion_point(lat1_deg,lat1_min,lat1_sec,lat1_pol,lon1_deg,lon1_min,lon1_sec,lon1_dir,distance,bearing_deg,bearing_min,bearing_sec):
+    lat1_dd = lat1_deg + (lat1_min/60) + (lat1_sec/3600)
+    lon1_dd = lon1_deg + (lon1_min/60) + (lon1_sec/3600)
+
+    bearing_dd = bearing_deg + (bearing_min/60) + (bearing_sec/3600)
 
 
+    if lat1_pol == "S" or lat1_pol == "s":
+        lat1_dd = -1 * lat1_dd
+    if lon1_dir == "W" or lon1_dir == "w":
+        lon1_dd = -1* lon1_dd
 
+    startpoint = lat1_dd, lon1_dd 
 
+    result = find_destination_point(startpoint,distance,bearing_dd)
+
+    return result
 
 
 
