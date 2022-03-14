@@ -81,14 +81,16 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def wrap90(self):
         lat1 = wrap90_helper(float(self.lat1.text()))
         lat2 = wrap90_helper(float(self.lat2.text()))
-
-        return lat1,lat2
+        start_lat = wrap90_helper(float(self.start_lat_lineedit.text()))
+        return lat1,lat2,start_lat
 
 
     def wrap180(self):
         lon1 = wrap180_helper(float(self.lon1.text()))
         lon2 = wrap180_helper(float(self.lon2.text()))
-        return lon1,lon2
+        start_lon = wrap180_helper(float(self.start_longitude_lineedit.text()))
+        azamith = wrap180_helper(float(self.bearing_lineEdit.text()))
+        return lon1,lon2,start_lon,azamith
     #functions for tab1
     def find_distance(self):
         lats = self.wrap90()
@@ -174,10 +176,14 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def calculate_destination_point(self):
         degree_sign = u"\N{DEGREE SIGN}"
-        start_lat = float(self.start_lat_lineedit.text()) # in dd
-        start_lon = float(self.start_longitude_lineedit.text()) # in dd
+
+        lats = self.wrap90()
+        lons = self.wrap180()
+        start_lat = lats[2]# in dd
+        start_lon = lons[2]
+        
         distance = float(self.distance_lineEdit.text()) # in km
-        azamith  = float(self.bearing_lineEdit.text()) # in dd
+        azamith  = lons[3] # in dd
 
         start_point = start_lat , start_lon
         
