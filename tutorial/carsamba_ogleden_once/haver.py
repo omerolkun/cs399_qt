@@ -20,14 +20,14 @@ def wrap90_helper(degree):
     print("a is ",a )
     return result
 
-    
+
 def wrap180_helper(degree):
     if degree>=-180 and degree <= 180:
         return float(degree)
     x = degree
     a =180
     p=360
-    return float((((2*a*x/p)%p)+p)%p-a)
+    return (((2 * a *x/p - p/2)%p)+p)%p - a
 
 # calculate distance in parameters dms , degree
 def calculate_distance_tab2(lat1_deg,lat1_min,lat1_sec,lon1_deg,lon1_min, lon1_sec,lat2_deg,lat2_min,lat2_sec, lon2_deg,lon2_min,lon2_sec,lat1_pole,lon1_dir,lat2_pole,lon2_dir):
