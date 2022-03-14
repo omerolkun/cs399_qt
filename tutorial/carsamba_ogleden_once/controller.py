@@ -3,7 +3,7 @@ from tokenize import Double
 from PySide2 import QtWidgets,QtGui
 from ui import Ui_MainWindow
 import math
-from haver import calculate_midpoint, convert_to_radian, find_bearing, radian_to_degree, dd_to_dms, calculate_distance,final_bearing, calculate_distance_tab2,calculate_azamith_tab2,calculate_final_bearing_tab2,calculate_mid_point_tab2
+from haver import calculate_midpoint, convert_to_radian, find_bearing, radian_to_degree, dd_to_dms, calculate_distance,final_bearing, calculate_distance_tab2,calculate_azamith_tab2,calculate_final_bearing_tab2,calculate_mid_point_tab2,wrap90_helper,wrap180_helper
 from dest_and_final_bearing import calculate_destinaion_point, find_destination_point
 class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def __init__(self):
@@ -77,13 +77,27 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.calculate_button_destination_point_tab2.clicked.connect(self.display_endpoint_and_bearing_tab2)
         
 
+
+    def wrap90(self):
+        lat1 = wrap90_helper(float(self.lat1.text()))
+        lat2 = wrap90_helper(float(self.lat2.text()))
+
+        return lat1,lat2
+
+
+    def wrap180(self):
+        lon1 = wrap180_helper(float(self.lon1.text()))
+        lon2 = wrap180_helper(float(self.lon2.text()))
+        return lon1,lon2
     #functions for tab1
     def find_distance(self):
-        lat1 = (float((self.lat1.text())))
-        lon1= float(self.lon1.text())
-        lat2 = float(self.lat2.text())
-        lon2 = float(self.lon2.text())
+        lats = self.wrap90()
+        lons = self.wrap180()
 
+        lat1 = lats[0]
+        lat2 = lats[1]
+        lon1 = lons[0]
+        lon2 = lons[1]
         point1 = lat1, lon1
         point2 = lat2, lon2
 
@@ -95,13 +109,13 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     
     def find_azamith(self):  # azamith means initial bearing
         degree_sign = u"\N{DEGREE SIGN}"
-
+        lats = self.wrap90()
+        lons = self.wrap180()
+        lat1 = lats[0]
+        lat2 = lats[1]
+        lon1 = lons[0]
+        lon2 = lons[1]
         
-        lat1 = (float((self.lat1.text())))
-        lon1= float(self.lon1.text())
-        lat2 = float(self.lat2.text())
-        lon2 = float(self.lon2.text())
-
         point1 = lat1, lon1
         point2 = lat2, lon2
         result = find_bearing(point1,point2)
@@ -118,10 +132,12 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     
     def find_final_bearing(self):
         degree_sign = u"\N{DEGREE SIGN}"
-        lat1 = (float((self.lat1.text())))
-        lon1= float(self.lon1.text())
-        lat2 = float(self.lat2.text())
-        lon2 = float(self.lon2.text())
+        lats = self.wrap90()
+        lons = self.wrap180()
+        lat1 = lats[0]
+        lat2 = lats[1]
+        lon1 = lons[0]
+        lon2 = lons[1]
 
         point1 = lat1, lon1
         point2 = lat2, lon2
@@ -137,11 +153,13 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def find_midpoint(self):
         degree_sign = u"\N{DEGREE SIGN}"
         
-        lat1 = float(self.lat1.text())
-        lon1 = float(self.lon1.text())
-        lat2 = float(self.lat2.text())
-        lon2 = float(self.lon2.text())
-
+        lats = self.wrap90()
+        lons = self.wrap180()
+        lat1 = lats[0]
+        lat2 = lats[1]
+        lon1 = lons[0]
+        lon2 = lons[1]
+        
         point1 = lat1, lon1
         point2 = lat2, lon2
 
