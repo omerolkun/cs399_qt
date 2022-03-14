@@ -22,7 +22,9 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.lon1.setValidator( lon_validator )
         self.lat2.setValidator( lat_validator )
         self.lon2.setValidator( lon_validator )
-
+        self.start_lat_lineedit.setValidator (lat_validator)
+        self.start_longitude_lineedit.setValidator(lon_validator)
+        self.bearing_lineEdit.setValidator(lon_validator)
         #validator for tab2 is lineedits - first part
         lat_deg_validator = QtGui.QDoubleValidator(0,90,4)
         lat_deg_validator.setNotation(QtGui.QDoubleValidator.StandardNotation)
@@ -55,7 +57,14 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.startpoint_lon_min_lineedit_tab2.setValidator(min_validator)
         self.startpoint_lon_sec_lineedit_tab2.setValidator(sec_validator)
 
-
+        self.lat1.setText(("0"))
+        self.lon1.setText("0")
+        self.lat2.setText("0")
+        self.lon2.setText("0")
+        self.start_lat_lineedit.setText("0")
+        self.start_longitude_lineedit.setText("0")
+        self.bearing_lineEdit.setText("0")
+        self.distance_lineEdit.setText("0")
 
 
         
@@ -363,6 +372,11 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         self.destination_label_value_tab2.setText(destination_point)
         self.final_bearing_value_label_lab2.setText(fbearing)
+
+
+
+
+
 
 app = QtWidgets.QApplication(sys.argv)
 window = ModiWindow()
