@@ -88,6 +88,12 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
 
     def wrap90(self):
+        if self.lat1.text() == "":
+            self.lat1.setText("0")
+        if self.lat2.text() == "":
+            self.lat2.setText("0")
+        if self.start_lat_lineedit.text() == "":
+            self.start_lat_lineedit.setText("0")
         lat1 = wrap90_helper(float(self.lat1.text()))
         lat2 = wrap90_helper(float(self.lat2.text()))
         start_lat = wrap90_helper(float(self.start_lat_lineedit.text()))
@@ -95,6 +101,15 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
 
     def wrap180(self):
+        if self.lon1.text() == "":
+            self.lon1.setText("0")
+        if self.lon2.text() == "":
+            self.lon2.setText("0")
+        if self.start_longitude_lineedit.text() == "":
+            self.start_longitude_lineedit.setText("0")
+        if self.bearing_lineEdit.text() == "":
+            self.bearing_lineEdit.setText("0")
+
         lon1 = wrap180_helper(float(self.lon1.text()))
         lon2 = wrap180_helper(float(self.lon2.text()))
         start_lon = wrap180_helper(float(self.start_longitude_lineedit.text()))
@@ -374,7 +389,7 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.final_bearing_value_label_lab2.setText(fbearing)
 
 
-
+    
 
 
 
