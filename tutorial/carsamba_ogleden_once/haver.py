@@ -32,6 +32,107 @@ def wrap180_helper(degree):
 def dms_to_dd(deg,min,sec):
     result = deg + min/60 + sec/3600
     return result
+# it is using in bearings method 
+def convert_to_radian(degree):
+    return degree * (math.pi/180)
+def radian_to_degree(value): # parameter is radian
+    return value * 180 / math.pi
+
+def dd_to_dms(value):
+    degree = int(value)
+    (minute_temp )= (value - (degree)) * 60
+    minute = int(minute_temp)
+    (seconds) = int((minute_temp-minute) * 60)
+    
+    return  (degree,minute,seconds)
+
+
+#tab3 functions 
+def find_intersection_point(lat1,lon1,lat2,lon2,b1,b2):
+    phi_1 = convert_to_radian(lat1)
+    phi_2 = convert_to_radian(lat2)
+    lambda_1 = convert_to_radian(lon1)
+    lambda_2 = convert_to_radian(lon2)
+
+    teta13 = convert_to_radian(b1)
+    teta23 = convert_to_radian(b2)
+
+    print("phi1 :",phi_1)
+    print("phi2 " ,phi_2)
+    print("lambda1 ",lambda_1)
+    print("lambda2 ",lambda_2)
+    print("teta13 ",teta13)
+    print("teta23 ",teta23)
+
+    delta_phi = phi_2 - phi_1
+    delta_lambda = lambda_2 - lambda_1
+
+
+    sigma12 = 2 * math.asin(math.sqrt(math.sin(delta_phi/2) * math.sin(delta_phi/2) + math.cos(phi_1) * math.cos(phi_2) * math.sin(delta_lambda/2) * math.sin(delta_lambda/2)))
+    print(sys.float_info.epsilon)
+    if abs(sigma12)  < sys.float_info.epsilon:
+        print("coincident points")
+        return 
+    
+
+    cos_teta_a = (math.sin(phi_2) - math.sin(phi_1) * math.cos(sigma12)) / (math.sin(sigma12) *  math.cos(phi_1))
+    cos_teta_b = (math.sin(phi_1) - math.sin(phi_2) * math.cos(sigma12)) / (math.sin(sigma12) * math.cos(phi_2));
+     
+
+    teta_a = math.acos( min(max(cos_teta_a, -1),1))
+    teta_b = math.acos (min(max(cos_teta_b, -1),1))
+
+    if math.sin(lambda_2 - lambda_1) > 0:
+        teta12 = teta_a
+    else: 
+        teta12 = 2 * math.pi - teta_a
+
+    if math.sin(lambda_2 - lambda_1) > 0:
+        teta21 = 2 * math.pi - teta_b
+    else:
+        teta21 = teta_b
+    
+    alfa_1 = teta13 - teta12
+    alfa_2 = teta21 - teta23
+    
+
+
+    if (math.sin(alfa_1) == 0 and math.sin(alfa_2) == 0):
+        print("b")
+        return
+    
+    if (math.sin(alfa_1) * math.sin(alfa_2) < 0) :
+        print("c")
+        return
+
+
+    
+    cos_alfa3 = -1 * math.cos(alfa_1) * math.cos(alfa_2) + math.sin(alfa_1) * math.sin(alfa_2) * math.cos(sigma12)
+    sigma13  =  math.atan2( math.sin(sigma12) * math.sin(alfa_1)* math.sin(alfa_2), math.cos(alfa_2) + math.cos(alfa_1)*cos_alfa3)
+
+    
+    phi_3 = math.asin(min(max(math.sin(phi_1)* math.cos(sigma13) + math.cos(phi_1) * math.sin(sigma13) * math.cos(teta13), -1),1))
+
+    delta_lambda13 = math.atan2(math.sin(teta13) * math.sin(sigma13) * math.cos(phi_1), math.cos(sigma13) - math.sin(phi_1)* math.sin(phi_3))
+
+    lambda_3 = lambda_1 + delta_lambda13
+
+    result_lat = radian_to_degree(phi_3)
+    result_lon = radian_to_degree(lambda_3)
+    dms_lat = dd_to_dms(result_lat)
+    dms_lon = dd_to_dms(result_lon)
+    print("result lat = ",dms_lat)
+    print("result lon = ",dms_lon)
+    return dms_lat, dms_lon
+
+
+
+
+
+
+
+
+
 
 
 # calculate distance in parameters dms , degree
@@ -45,11 +146,9 @@ def calculate_distance_tab2(lat1_deg,lat1_min,lat1_sec,lon1_deg,lon1_min, lon1_s
    
     #it sets the negative possibilies of values for dd format
     if lat1_pole == 'S' or lat1_pole == 's':
-        print(" pole is s")
         lat1_dd = -1 * lat1_dd
     if lon1_dir == 'W' or lon1_dir == 'w':
         lon1_dd = -1 * lon1_dd
-        print("lon1 dir is w")
     if lat2_pole == 'S' or lat2_pole == 's':
         lat2_dd = -1 * lat2_dd
     if lon2_dir == 'W' or lon2_dir == 'w':
@@ -59,16 +158,6 @@ def calculate_distance_tab2(lat1_deg,lat1_min,lat1_sec,lon1_deg,lon1_min, lon1_s
 
 
 
-    print("p1 dms_lat",lat1_deg, " ", lat1_min, " ", lat1_sec, " ", lat1_pole)
-    print("p1 dms_lon",lon1_deg, " ", lon1_min, " ", lon1_sec, " ", lon1_dir)
-    print("p1 dms_lat2",lat2_deg, " ", lat2_min, " ", lat2_sec, " ", lat2_pole)
-    print("p1 dms_lon2",lon2_deg, " ", lon2_min, " ", lon2_sec, " ", lon2_dir)
-    print(" ")
-    print("p1 dd lat", lat1_dd)
-    print("p1 dd lon", lon1_dd)
-    
-    print("p2 dd lat", lat2_dd)
-    print("p2 dd lon", lon2_dd)
 
 
 
@@ -203,15 +292,11 @@ def make_decimal(point):
 
         return result
 
-# it is using in bearings method 
-def convert_to_radian(degree):
-    return degree * (math.pi/180)
 
 def calculate_distance(point1, point2):
     '''p1 = make_decimal(point1)
     p2 = make_decimal(point2)'''
-    print(point1)
-    print(point2)
+
 
     lat1 = point1[0]
     lat2 = point2[0]
@@ -244,13 +329,6 @@ def calculate_distance(point1, point2):
 
 
 
-def dd_to_dms(value):
-    degree = int(value)
-    (minute_temp )= (value - (degree)) * 60
-    minute = int(minute_temp)
-    (seconds) = int((minute_temp-minute) * 60)
-    
-    return  (degree,minute,seconds)
 
 
 def find_bearing(point1, point2): #parameters elements are in dd format
@@ -320,8 +398,6 @@ def calculate_midpoint(point1, point2):
     result_lon = dms_lon,direction
     return result_lat, result_lon
 
-def radian_to_degree(value): # parameter is radian
-    return value * 180 / math.pi
 
 
 if __name__ == "__main__":
@@ -428,7 +504,7 @@ if __name__ == "__main__":
     point1 = lat1, lon1
     point2 = lat2, lon2
 
-    print("point1 :" , point1)
+'''    print("point1 :" , point1)
     print("point2 : ", point2)
 
     print( "---------\nDISTANCE: ", calculate_distance(point1,point2))
@@ -441,7 +517,7 @@ if __name__ == "__main__":
 
     print("Mid point is ", calculate_midpoint(point1,point2))
 
-
+'''
 
 
 
