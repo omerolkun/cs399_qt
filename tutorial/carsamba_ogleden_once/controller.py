@@ -6,7 +6,7 @@ from PySide2 import QtWidgets,QtGui
 from ui import Ui_MainWindow
 import math
 import random
-from haver import calculate_midpoint, convert_to_radian, find_bearing, radian_to_degree, dd_to_dms, calculate_distance,final_bearing, calculate_distance_tab2,calculate_azamith_tab2,calculate_final_bearing_tab2,calculate_mid_point_tab2,wrap90_helper,wrap180_helper
+from haver import calculate_midpoint, convert_to_radian, find_bearing, radian_to_degree, dd_to_dms, calculate_distance,final_bearing, calculate_distance_tab2,calculate_azamith_tab2,calculate_final_bearing_tab2,calculate_mid_point_tab2,wrap90_helper,wrap180_helper,find_intersection_point
 from dest_and_final_bearing import calculate_destinaion_point, find_destination_point
 from PyQt5.QtWidgets import QMessageBox
 
@@ -79,6 +79,15 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.startpoint_lon_sec_lineedit_tab2.setValidator(sec_validator)
 
 
+        #set validators for lineedit inputs - tab3 - intersection point
+        self.lat1_dd_tab3.setValidator(lat_validator)
+        self.lat2_dd_tab3.setValidator(lat_validator)
+        self.lon1_dd_tab3.setValidator(lon_validator)
+        self.lon2_dd_tab3.setValidator(lon_validator)
+        self.bearing1_dd_tab3.setValidator(lon_validator)
+        self.bearing2_dd_tab3.setValidator(lon_validator)
+
+
         #default values for tab1 
         self.lat1.setText(str(round(random.uniform(-90,90),3)))
         self.lon1.setText(str(round(random.uniform(-180,180),3)))
@@ -103,15 +112,15 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.lon2_min_lineedit.setText(str(round(random.uniform(0,59))))
         self.lon2_sec_lineedit.setText(str(round(random.uniform(0,59),0)))
 
-        self.startpoint_lat_deg_lineedit_tab2.setText(str(round(random.uniform(0,90),0)))
-        self.startpoint_lat_min_lineedit_tab2.setText(str(round(random.uniform(0,59),0)))
+        self.startpoint_lat_deg_lineedit_tab2.setText(str(round(random.uniform(0,90))))
+        self.startpoint_lat_min_lineedit_tab2.setText(str(round(random.uniform(0,59))))
         self.startpoint_lat_sec_lineedit_tab2.setText(str(round(random.uniform(0,59),0)))
-        self.startpoint_lon_deg_lineedit_tab2.setText(str(round(random.uniform(0,180),0)))
-        self.startpoint_lon_min_lineedit_tab2.setText(str(round(random.uniform(0,59),0)))
+        self.startpoint_lon_deg_lineedit_tab2.setText(str(round(random.uniform(0,180))))
+        self.startpoint_lon_min_lineedit_tab2.setText(str(round(random.uniform(0,59))))
         self.startpoint_lon_sec_lineedit_tab2.setText(str(round(random.uniform(0,59),0)))
 
-        self.bearing_deg_lineedit_tab2.setText(str(round(random.uniform(0,90),0)))
-        self.bearing_min_lineedit_tab2.setText(str(round(random.uniform(0,59),0)))
+        self.bearing_deg_lineedit_tab2.setText(str(round(random.uniform(0,90))))
+        self.bearing_min_lineedit_tab2.setText(str(round(random.uniform(0,59))))
         self.bearing_sec_lineedit_tab2.setText(str(round(random.uniform(0,59),0)))
         
         self.distance_lineedit_tab2.setText(str(round(random.uniform(0,3500),0)))
@@ -129,7 +138,8 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.calculate_button_tab2.clicked.connect(self.display_midpoint_tab2)
         self.calculate_button_destination_point_tab2.clicked.connect(self.display_endpoint_and_bearing_tab2)
         
-
+        #buttons for tab3
+        self.calculate_inter_point_button.clicked.connect(self.display_intersection_point_dd)
 #for tab1
     def wrap90(self):
         if self.lat1.text() == "":
@@ -534,6 +544,23 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     
 
+# function of tab3 - finding intersection point
+    def display_intersection_point_dd(self):
+        lat1 = float(self.lat1_dd_tab3.text())
+        lat2 = float(self.lat2_dd_tab3.text())
+        lon1 = float(self.lon1_dd_tab3.text())
+        lon2 = float(self.lon2_dd_tab3.text())
+        b1 = float (self.bearing1_dd_tab3.text())
+        b2 = float(self.bearing2_dd_tab3.text())
+
+        result = find_intersection_point(lat1,lon1,lat2,lon2,b1,b2)
+        intersection_lat_deg = str(result[0][0])
+        intersection_lat_min = str(result[0][1])
+        intersection_lat_sec = str(result[0][2])
+        intersection_lon_deg = str(result[1][0])
+        intersection_lon_min = str(result[1][1])
+        intersection_lon_sec = str(result[1][2])
+        self.intersection_point_value_label.setText(intersection_lat_deg + " " + intersection_lat_min + " "+ intersection_lat_sec + " - " + intersection_lon_deg + " "+ intersection_lon_min + intersection_lon_sec)
 
 
 app = QtWidgets.QApplication(sys.argv)
