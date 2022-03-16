@@ -34,6 +34,8 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         lon_validator = QtGui.QDoubleValidator(-180,180,8)
         lon_validator.setNotation(QtGui.QDoubleValidator.StandardNotation)
         
+
+        
         #set validators for lineedit inputs 
         self.lat1.setValidator( lat_validator)
         self.lon1.setValidator( lon_validator )
@@ -42,15 +44,17 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.start_lat_lineedit.setValidator (lat_validator)
         self.start_longitude_lineedit.setValidator(lon_validator)
         self.bearing_lineEdit.setValidator(lon_validator)
+
+        
         #validator for tab2 is lineedits - first part
-        lat_deg_validator = QtGui.QDoubleValidator(0,90,4)
-        lat_deg_validator.setNotation(QtGui.QDoubleValidator.StandardNotation)
-        min_validator = QtGui.QDoubleValidator(0,60,4)
-        min_validator.setNotation(QtGui.QDoubleValidator.StandardNotation)
-        sec_validator = QtGui.QDoubleValidator(0,60,4)
+        lat_deg_validator = QtGui.QIntValidator(0,90,self)
+        #lat_deg_validator.setNotation(QtGui.QDoubleValidator.StandardNotation)
+        lon_deg_validator = QtGui.QIntValidator(0,180,self)
+        #lon_deg_validator.setNotation(QtGui.QDoubleValidator.StandardNotation)
+        min_validator = QtGui.QIntValidator(0,60,self)
+        #min_validator.setNotation(QtGui.QDoubleValidator.StandardNotation)
+        sec_validator = QtGui.QDoubleValidator(0,60,0)
         sec_validator.setNotation(QtGui.QDoubleValidator.StandardNotation)
-        lon_deg_validator = QtGui.QDoubleValidator(0,180,4)
-        lon_deg_validator.setNotation(QtGui.QDoubleValidator.StandardNotation)
         
         #set validators for lineedit inputs - first part
         self.lat1_deg_lineedit.setValidator( lat_deg_validator)
@@ -86,20 +90,20 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.distance_lineEdit.setText(str(round(random.uniform(0,3400),3)))
 
         #default values for tab2 
-        self.lat1_deg_lineedit.setText(str(round(random.uniform(0,90),3)))
-        self.lat1_min_lineedit.setText(str(round(random.uniform(0,59),0)))
+        self.lat1_deg_lineedit.setText(str(round(random.uniform(0,90))))
+        self.lat1_min_lineedit.setText(str(round(random.uniform(0,59))))
         self.lat1_sec_lineedit.setText(str(round(random.uniform(0,59),0)))
-        self.lon1_deg_lineedit.setText(str(round(random.uniform(0,180),3)))
-        self.lon1_min_lineedit.setText(str(round(random.uniform(0,59),0)))
+        self.lon1_deg_lineedit.setText(str(round(random.uniform(0,180))))
+        self.lon1_min_lineedit.setText(str(round(random.uniform(0,59))))
         self.lon1_sec_lineedit.setText(str(round(random.uniform(0,59),0)))
-        self.lat2_deg_lineedit.setText(str(round(random.uniform(0,90),3)))
-        self.lat2_min_lineedit.setText(str(round(random.uniform(0,59),0)))
+        self.lat2_deg_lineedit.setText(str(round(random.uniform(0,90))))
+        self.lat2_min_lineedit.setText(str(round(random.uniform(0,59))))
         self.lat2_sec_lineedit.setText(str(round(random.uniform(0,59),0)))
-        self.lon2_deg_lineedit.setText(str(round(random.uniform(0,180),3)))
-        self.lon2_min_lineedit.setText(str(round(random.uniform(0,59),0)))
+        self.lon2_deg_lineedit.setText(str(round(random.uniform(0,180))))
+        self.lon2_min_lineedit.setText(str(round(random.uniform(0,59))))
         self.lon2_sec_lineedit.setText(str(round(random.uniform(0,59),0)))
 
-        self.startpoint_lat_deg_lineedit_tab2.setText(str(round(random.uniform(0,90),2)))
+        self.startpoint_lat_deg_lineedit_tab2.setText(str(round(random.uniform(0,90),0)))
         self.startpoint_lat_min_lineedit_tab2.setText(str(round(random.uniform(0,59),0)))
         self.startpoint_lat_sec_lineedit_tab2.setText(str(round(random.uniform(0,59),0)))
         self.startpoint_lon_deg_lineedit_tab2.setText(str(round(random.uniform(0,180),0)))
