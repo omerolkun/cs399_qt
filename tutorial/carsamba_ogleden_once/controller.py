@@ -1,8 +1,11 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 import sys
 from tokenize import Double
 from PySide2 import QtWidgets,QtGui
 from ui import Ui_MainWindow
 import math
+import random
 from haver import calculate_midpoint, convert_to_radian, find_bearing, radian_to_degree, dd_to_dms, calculate_distance,final_bearing, calculate_distance_tab2,calculate_azamith_tab2,calculate_final_bearing_tab2,calculate_mid_point_tab2,wrap90_helper,wrap180_helper
 from dest_and_final_bearing import calculate_destinaion_point, find_destination_point
 from PyQt5.QtWidgets import QMessageBox
@@ -14,7 +17,9 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.setupUi(self)
         self.invalid = False
 
+
         
+
         self.point1_lat_pole.addItems(["N","S"])
         self.point1_lon_dir.addItems(["E","W"])
         self.point2_lat_pole.addItems(["N","S"])
@@ -71,41 +76,41 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
 
         #default values for tab1 
-        self.lat1.setText(("0"))
-        self.lon1.setText("0")
-        self.lat2.setText("0")
-        self.lon2.setText("0")
-        self.start_lat_lineedit.setText("0")
-        self.start_longitude_lineedit.setText("0")
-        self.bearing_lineEdit.setText("0")
-        self.distance_lineEdit.setText("0")
+        self.lat1.setText(str(round(random.uniform(-90,90),3)))
+        self.lon1.setText(str(round(random.uniform(-180,180),3)))
+        self.lat2.setText(str(round(random.uniform(-180,180),3)))
+        self.lon2.setText(str(round(random.uniform(-90,90),3)))
+        self.start_lat_lineedit.setText(str(round(random.uniform(-90,90),3)))
+        self.start_longitude_lineedit.setText(str(round(random.uniform(-180,180),3)))
+        self.bearing_lineEdit.setText(str(round(random.uniform(-180,180),3)))
+        self.distance_lineEdit.setText(str(round(random.uniform(0,3400),3)))
 
         #default values for tab2 
-        self.lat1_deg_lineedit.setText("0")
-        self.lat1_min_lineedit.setText("0")
-        self.lat1_sec_lineedit.setText("0")
-        self.lon1_deg_lineedit.setText("0")
-        self.lon1_min_lineedit.setText("0")
-        self.lon1_sec_lineedit.setText("0")
-        self.lat2_deg_lineedit.setText("0")
-        self.lat2_min_lineedit.setText("0")
-        self.lat2_sec_lineedit.setText("0")
-        self.lon2_deg_lineedit.setText("0")
-        self.lon2_min_lineedit.setText("0")
-        self.lon2_sec_lineedit.setText("0")
+        self.lat1_deg_lineedit.setText(str(round(random.uniform(0,90),3)))
+        self.lat1_min_lineedit.setText(str(round(random.uniform(0,59),0)))
+        self.lat1_sec_lineedit.setText(str(round(random.uniform(0,59),0)))
+        self.lon1_deg_lineedit.setText(str(round(random.uniform(0,180),3)))
+        self.lon1_min_lineedit.setText(str(round(random.uniform(0,59),0)))
+        self.lon1_sec_lineedit.setText(str(round(random.uniform(0,59),0)))
+        self.lat2_deg_lineedit.setText(str(round(random.uniform(0,90),3)))
+        self.lat2_min_lineedit.setText(str(round(random.uniform(0,59),0)))
+        self.lat2_sec_lineedit.setText(str(round(random.uniform(0,59),0)))
+        self.lon2_deg_lineedit.setText(str(round(random.uniform(0,180),3)))
+        self.lon2_min_lineedit.setText(str(round(random.uniform(0,59),0)))
+        self.lon2_sec_lineedit.setText(str(round(random.uniform(0,59),0)))
 
-        self.startpoint_lat_deg_lineedit_tab2.setText("0")
-        self.startpoint_lat_min_lineedit_tab2.setText("0")
-        self.startpoint_lat_sec_lineedit_tab2.setText("0")
-        self.startpoint_lon_deg_lineedit_tab2.setText("0")
-        self.startpoint_lon_min_lineedit_tab2.setText("0")
-        self.startpoint_lon_sec_lineedit_tab2.setText("0")
+        self.startpoint_lat_deg_lineedit_tab2.setText(str(round(random.uniform(0,90),2)))
+        self.startpoint_lat_min_lineedit_tab2.setText(str(round(random.uniform(0,59),0)))
+        self.startpoint_lat_sec_lineedit_tab2.setText(str(round(random.uniform(0,59),0)))
+        self.startpoint_lon_deg_lineedit_tab2.setText(str(round(random.uniform(0,180),0)))
+        self.startpoint_lon_min_lineedit_tab2.setText(str(round(random.uniform(0,59),0)))
+        self.startpoint_lon_sec_lineedit_tab2.setText(str(round(random.uniform(0,59),0)))
 
-        self.bearing_deg_lineedit_tab2.setText("0")
-        self.bearing_min_lineedit_tab2.setText("0")
-        self.bearing_sec_lineedit_tab2.setText("0")
+        self.bearing_deg_lineedit_tab2.setText(str(round(random.uniform(0,90),0)))
+        self.bearing_min_lineedit_tab2.setText(str(round(random.uniform(0,59),0)))
+        self.bearing_sec_lineedit_tab2.setText(str(round(random.uniform(0,59),0)))
         
-        self.distance_lineedit_tab2.setText("0")
+        self.distance_lineedit_tab2.setText(str(round(random.uniform(0,3500),0)))
         #buttons for tab1
         self.calculate_button.clicked.connect(self.find_distance)
         self.calculate_button.clicked.connect(self.find_azamith)
@@ -186,13 +191,12 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
 #functions for tab1
     def find_distance(self):
-        lats = self.wrap90()
-        lons = self.wrap180()
+       
 
-        lat1 = lats[0]
-        lat2 = lats[1]
-        lon1 = lons[0]
-        lon2 = lons[1]
+        lat1 = float(self.lat1.text())
+        lat2 = float(self.lat2.text())
+        lon1 = float(self.lon1.text())
+        lon2 = float(self.lon2.text())
         point1 = lat1, lon1
         point2 = lat2, lon2
 
@@ -204,13 +208,14 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     
     def find_azamith(self):  # azamith means initial bearing
         degree_sign = u"\N{DEGREE SIGN}"
-        lats = self.wrap90()
-        lons = self.wrap180()
-        lat1 = lats[0]
-        lat2 = lats[1]
-        lon1 = lons[0]
-        lon2 = lons[1]
+
         
+        lat1 = float(self.lat1.text())
+        lat2 = float(self.lat2.text())
+        lon1 = float(self.lon1.text())
+        lon2 = float(self.lon2.text())
+
+
         point1 = lat1, lon1
         point2 = lat2, lon2
         result = find_bearing(point1,point2)
@@ -227,12 +232,12 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     
     def find_final_bearing(self):
         degree_sign = u"\N{DEGREE SIGN}"
-        lats = self.wrap90()
-        lons = self.wrap180()
-        lat1 = lats[0]
-        lat2 = lats[1]
-        lon1 = lons[0]
-        lon2 = lons[1]
+
+
+        lat1 = float(self.lat1.text())
+        lon1 = float(self.lon1.text())
+        lat2 = float(self.lat2.text())
+        lon2 = float(self.lon2.text())
 
         point1 = lat1, lon1
         point2 = lat2, lon2
@@ -248,13 +253,12 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def find_midpoint(self):
         degree_sign = u"\N{DEGREE SIGN}"
         
-        lats = self.wrap90()
-        lons = self.wrap180()
-        lat1 = lats[0]
-        lat2 = lats[1]
-        lon1 = lons[0]
-        lon2 = lons[1]
+
         
+        lat1 = float(self.lat1.text())
+        lon1 = float(self.lon1.text())
+        lat2 = float(self.lat2.text())
+        lon2 = float(self.lon2.text())
         point1 = lat1, lon1
         point2 = lat2, lon2
 
@@ -270,13 +274,13 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def calculate_destination_point(self):
         degree_sign = u"\N{DEGREE SIGN}"
 
-        lats = self.wrap90()
-        lons = self.wrap180()
-        start_lat = lats[2]# in dd
-        start_lon = lons[2]
+
         
+
+        start_lat = float(self.start_lat_lineedit.text())
+        start_lon = float(self.start_longitude_lineedit.text())
         distance = float(self.distance_lineEdit.text()) # in km
-        azamith  = lons[3] # in dd
+        azamith  = float(self.bearing_lineEdit.text()) # in dd
 
         start_point = start_lat , start_lon
         
@@ -336,7 +340,6 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         if lat1_sec > 59 or lon1_sec > 59 or lat2_sec > 59 or lon2_sec > 59:
             flip = flip + 1
             warning_list.append("Seconds must be in 0-59")
-        a = (lat1_pole == 'n' or lat1_pole == 'N' or lat1_pole == 's' or lat1_pole == 'S')
         
         if flip > 0:
             errorko = ""
@@ -351,20 +354,19 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             msg.exec_()
             return
 
-        lats = self.wrap90_tab2_part1()
-        lons = self.wrap180_tab2_par1()
-        lat1_deg = lats[0]
-        lat2_deg = lats[1]
-        lon1_deg = lons[0]
-        lon2_deg = lons[1]      
+   
 
-        print("lats is ",lats)
-
+        
+        print("---begining of inside calculate distance tab2---")
         print("point1_lat :" , lat1_deg," ", lat1_min, " ", lat1_sec)
         print("point1_lon :", lon1_deg, " ", lon1_min, " ",lon1_sec )
-
+        print("pole of point1 :",lat1_pole)
+        print("direction of point1 :", lon1_dir)
         print("point2_lat", lat2_deg, " ", lat2_min, " ", lat2_sec)
-        print("point2_lon:", lon2_deg, " ", lon2_min, " ", lon2_sec)   
+        print("point2_lon:", lon2_deg, " ", lon2_min, " ", lon2_sec)
+        print("pole of point2 :" , lat2_pole)
+        print("direction of point2 :", lon2_dir)
+        print("---end of inside calculate distance tab2---")   
         distance = calculate_distance_tab2(lat1_deg,lat1_min,lat1_sec,lon1_deg,lon1_min,lon1_sec,lat2_deg,lat2_min,lat2_sec,lon2_deg,lon2_min,lon2_sec,lat1_pole,lon1_dir,lat2_pole,lon2_dir)
 
         self.distance_value_label.setText(str(distance))
@@ -480,6 +482,31 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         b_min = float(self.bearing_min_lineedit_tab2.text())
         b_sec = float(self.bearing_sec_lineedit_tab2.text())
         result = calculate_destinaion_point(lat_deg, lat_min,lat_sec, lat_pole,lon_deg,lon_min,lon_sec,lon_dir,distance,b_deg,b_min,b_sec)
+        
+        flip = 0
+        warning_list = []
+        #check minutes and seconds
+        if lat_min > 59 or lon_min >59:
+            flip = flip + 1
+        warning_list.append("Minutes must be in 0-59")
+        
+        if lat_sec > 59 or lon_sec > 59 :
+            flip = flip + 1
+            warning_list.append("Seconds must be in 0-59")
+        
+        if flip > 0:
+            errorko = ""
+            self.invalid = True
+            for item in warning_list:
+                errorko = errorko + item + "\n"
+            msg = QMessageBox()
+            msg.setWindowTitle("Invalid Input")
+            msg.setIcon(QMessageBox.Critical)
+
+            msg.setText(errorko)
+            msg.exec_()
+            return
+        
         dest_lag_deg = result[0][0][0][0]
         dest_lag_min = result[0][0][0][1]
         dest_lag_sec = result[0][0][0][2]
@@ -491,6 +518,9 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         fbearing_deg = result[1][0]
         fbearing_min = result[1][1]
         fbearing_sec = result[1][2]
+
+
+
         destination_point = str(dest_lag_deg)+degree_sign+" "+str(dest_lag_min)+"\' " + str(dest_lag_sec)+" \'\' " + dest_pole + "  "+str(dest_lon_deg)+degree_sign+" "+str(dest_lon_min)+"\' "+str(dest_lon_sec)+"\'\' " + dest_dir
         fbearing = str(fbearing_deg)+degree_sign + " "+ str(fbearing_min)+"\' "+str(fbearing_sec)+"\'\'"
 
