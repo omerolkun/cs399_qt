@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 import random
 import math
 import sys
@@ -14,10 +17,7 @@ def wrap90_helper(degree):
     a = 90
     p = 360
     result = float ( float(4*a/p) * abs((((x-p/4)%p)+p)%p - p/2) - a )
-    '''print ("result = ", result)
-    print("4*a/p: ", 4*a/p)
-    print("abs((((x-p),,,",abs((((x-p)%p)+p)%p - p/2) )
-    print("a is ",a )'''
+   
     return result
 
 
@@ -42,18 +42,38 @@ def calculate_distance_tab2(lat1_deg,lat1_min,lat1_sec,lon1_deg,lon1_min, lon1_s
     lat2_dd = lat2_deg + (lat2_min/60) + (lat2_sec/3600)
     lon2_dd = lon2_deg + (lon2_min/60) + (lon2_sec/3600)
 
+   
     #it sets the negative possibilies of values for dd format
     if lat1_pole == 'S' or lat1_pole == 's':
+        print(" pole is s")
         lat1_dd = -1 * lat1_dd
     if lon1_dir == 'W' or lon1_dir == 'w':
         lon1_dd = -1 * lon1_dd
+        print("lon1 dir is w")
     if lat2_pole == 'S' or lat2_pole == 's':
         lat2_dd = -1 * lat2_dd
     if lon2_dir == 'W' or lon2_dir == 'w':
         lon2_dd = -1 * lon2_dd
 
+
+
+
+
+    print("p1 dms_lat",lat1_deg, " ", lat1_min, " ", lat1_sec, " ", lat1_pole)
+    print("p1 dms_lon",lon1_deg, " ", lon1_min, " ", lon1_sec, " ", lon1_dir)
+    print("p1 dms_lat2",lat2_deg, " ", lat2_min, " ", lat2_sec, " ", lat2_pole)
+    print("p1 dms_lon2",lon2_deg, " ", lon2_min, " ", lon2_sec, " ", lon2_dir)
+    print(" ")
+    print("p1 dd lat", lat1_dd)
+    print("p1 dd lon", lon1_dd)
+    
+    print("p2 dd lat", lat2_dd)
+    print("p2 dd lon", lon2_dd)
+
+
+
     #final results for point1 and point2    
-    point1 = lat1_dd,lon1_dd
+    point1 = lat1_dd, lon1_dd
     point2 = lat2_dd, lon2_dd
 
 
@@ -190,7 +210,8 @@ def convert_to_radian(degree):
 def calculate_distance(point1, point2):
     '''p1 = make_decimal(point1)
     p2 = make_decimal(point2)'''
-    
+    print(point1)
+    print(point2)
 
     lat1 = point1[0]
     lat2 = point2[0]
