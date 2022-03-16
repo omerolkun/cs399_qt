@@ -124,6 +124,15 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.bearing_sec_lineedit_tab2.setText(str(round(random.uniform(0,59),0)))
         
         self.distance_lineedit_tab2.setText(str(round(random.uniform(0,3500),0)))
+
+        #default values for tab3
+        self.lat1_dd_tab3.setText(str(round(random.uniform(-90,90,))))
+        self.lat2_dd_tab3.setText(str(round(random.uniform(-90,90))))
+        self.lon1_dd_tab3.setText(str(round(random.uniform(-180,180))))
+        self.lon2_dd_tab3.setText(str(round(random.uniform(-180,180))))
+        self.bearing1_dd_tab3.setText(str(round(random.uniform(-180,180))))
+        self.bearing2_dd_tab3.setText(str(round(random.uniform(-180,180))))
+
         #buttons for tab1
         self.calculate_button.clicked.connect(self.find_distance)
         self.calculate_button.clicked.connect(self.find_azamith)
@@ -368,19 +377,7 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             msg.exec_()
             return
 
-   
-
-        
-        print("---begining of inside calculate distance tab2---")
-        print("point1_lat :" , lat1_deg," ", lat1_min, " ", lat1_sec)
-        print("point1_lon :", lon1_deg, " ", lon1_min, " ",lon1_sec )
-        print("pole of point1 :",lat1_pole)
-        print("direction of point1 :", lon1_dir)
-        print("point2_lat", lat2_deg, " ", lat2_min, " ", lat2_sec)
-        print("point2_lon:", lon2_deg, " ", lon2_min, " ", lon2_sec)
-        print("pole of point2 :" , lat2_pole)
-        print("direction of point2 :", lon2_dir)
-        print("---end of inside calculate distance tab2---")   
+ 
         distance = calculate_distance_tab2(lat1_deg,lat1_min,lat1_sec,lon1_deg,lon1_min,lon1_sec,lat2_deg,lat2_min,lat2_sec,lon2_deg,lon2_min,lon2_sec,lat1_pole,lon1_dir,lat2_pole,lon2_dir)
 
         self.distance_value_label.setText(str(distance))
@@ -554,14 +551,23 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         b2 = float(self.bearing2_dd_tab3.text())
 
         result = find_intersection_point(lat1,lon1,lat2,lon2,b1,b2)
-        intersection_lat_deg = str(result[0][0])
-        intersection_lat_min = str(result[0][1])
-        intersection_lat_sec = str(result[0][2])
-        intersection_lon_deg = str(result[1][0])
-        intersection_lon_min = str(result[1][1])
-        intersection_lon_sec = str(result[1][2])
-        self.intersection_point_value_label.setText(intersection_lat_deg + " " + intersection_lat_min + " "+ intersection_lat_sec + " - " + intersection_lon_deg + " "+ intersection_lon_min + intersection_lon_sec)
-
+        print(len(result))
+        if len(result) == 2:
+            print("lkejsf")
+            intersection_lat_deg = str(result[0][0][0])
+            intersection_lat_min = str(result[0][0][1])
+            intersection_lat_sec = str(result[0][0][2])
+            intersection_lon_deg = str(result[1][0][0])
+            intersection_lon_min = str(result[1][0][1])
+            intersection_lon_sec = str(result[1][0][2])
+            pole = str(result[0][1])
+            direction = str(result[1][1])
+            self.intersection_point_value_label.setText(intersection_lat_deg + " " + intersection_lat_min + " "+ intersection_lat_sec + " "+pole+" - " + intersection_lon_deg + " "+ intersection_lon_min + " "+ intersection_lon_sec + " " + direction)
+        else:
+            print(len(result))
+            value = str(result[0])
+            print(value)
+            self.intersection_point_value_label.setText(value)
 
 app = QtWidgets.QApplication(sys.argv)
 window = ModiWindow()
