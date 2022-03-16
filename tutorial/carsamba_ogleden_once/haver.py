@@ -7,17 +7,17 @@ point2 = 0,0
 R = 6371000 # in meters
 
 def wrap90_helper(degree):
-    if degree >= -90 and degree <= 90:
+    if float(degree) >= -90 and float(degree) <= 90:
        return float(degree)
        
     x  = degree
     a = 90
     p = 360
     result = float ( float(4*a/p) * abs((((x-p/4)%p)+p)%p - p/2) - a )
-    print ("result = ", result)
+    '''print ("result = ", result)
     print("4*a/p: ", 4*a/p)
     print("abs((((x-p),,,",abs((((x-p)%p)+p)%p - p/2) )
-    print("a is ",a )
+    print("a is ",a )'''
     return result
 
 
@@ -28,6 +28,11 @@ def wrap180_helper(degree):
     a =180
     p=360
     return (((2 * a *x/p - p/2)%p)+p)%p - a
+
+def dms_to_dd(deg,min,sec):
+    result = deg + min/60 + sec/3600
+    return result
+
 
 # calculate distance in parameters dms , degree
 def calculate_distance_tab2(lat1_deg,lat1_min,lat1_sec,lon1_deg,lon1_min, lon1_sec,lat2_deg,lat2_min,lat2_sec, lon2_deg,lon2_min,lon2_sec,lat1_pole,lon1_dir,lat2_pole,lon2_dir):
@@ -108,7 +113,6 @@ def calculate_final_bearing_tab2(lat1_deg,lat1_min,lat1_sec,lon1_deg,lon1_min, l
     point2 = lat2_dd, lon2_dd
     
     result = final_bearing(point1,point2)
-    print(result)
     return result
 
 def calculate_mid_point_tab2(lat1_deg,lat1_min,lat1_sec,lon1_deg,lon1_min, lon1_sec,lat2_deg,lat2_min,lat2_sec, lon2_deg,lon2_min,lon2_sec,lat1_pole,lon1_dir,lat2_pole,lon2_dir):
@@ -187,15 +191,11 @@ def calculate_distance(point1, point2):
     '''p1 = make_decimal(point1)
     p2 = make_decimal(point2)'''
     
-    print("poin1 ",point1)
-    print("point2",point2)
+
     lat1 = point1[0]
     lat2 = point2[0]
     long1 = point1[1]
     long2 = point2[1]
-
-    print("lat1 ",(lat1))
-    print("lat2",lat2)
 
     phase1 = lat1 * math.pi / 180 # radian value of latitude of point1
     phase2 = lat2 * math.pi / 180 # radian value of latitude of point2
