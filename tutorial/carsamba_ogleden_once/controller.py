@@ -117,8 +117,8 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         #default values for tab1 
         self.lat1.setText(str(round(random.uniform(-90,90),3)))
         self.lon1.setText(str(round(random.uniform(-180,180),3)))
-        self.lat2.setText(str(round(random.uniform(-180,180),3)))
-        self.lon2.setText(str(round(random.uniform(-90,90),3)))
+        self.lat2.setText(str(round(random.uniform(-90,90),3)))
+        self.lon2.setText(str(round(random.uniform(-180,180),3)))
         self.start_lat_lineedit.setText(str(round(random.uniform(-90,90),3)))
         self.start_longitude_lineedit.setText(str(round(random.uniform(-180,180),3)))
         self.bearing_lineEdit.setText(str(round(random.uniform(-180,180),3)))
@@ -273,9 +273,12 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         flip = 0 
         warning_list = []
+        print("lat1 = ",lat1)
+        print("lat2 = ",lat2)
         if lat1 > 90 or lat1 < -90 or lat2 > 90 or lat2 < -90:
             flip = flip + 1
-            warning_list.append("Latitudes must be in the range from -90 to 90")
+
+            warning_list.append("Latitudes must be idsfhdfn the range from -90 to 90")
         if lon1 > 180 or lon1 < -180 or lon2 > 180 or lon2 < -180:
             flip = flip + 1 
             warning_list.append("Longitudes must be in the range from -180 to 180")
@@ -312,21 +315,9 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         warning_list = []
         if lat1 > 90 or lat1 < -90 or lat2 > 90 or lat2 < -90:
             flip = flip + 1
-            warning_list.append("Latitudes must be in the range from -90 to 90")
         if lon1 > 180 or lon1 < -180 or lon2 > 180 or lon2 < -180:
             flip = flip + 1 
-            warning_list.append("Longitudes must be in the range from -180 to 180")
         if flip > 0:
-            errorko = ""
-            self.invalid = True
-            for item in warning_list:
-                errorko = errorko + item + "\n"
-            msg = QMessageBox()
-            msg.setWindowTitle("Invalid Input")
-            msg.setIcon(QMessageBox.Critical)
-
-            msg.setText(errorko)
-            msg.exec_()
             return    
         
         result = find_bearing(point1,point2)
@@ -353,21 +344,9 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         warning_list = []
         if lat1 > 90 or lat1 < -90 or lat2 > 90 or lat2 < -90:
             flip = flip + 1
-            warning_list.append("Latitudes must be in the range from -90 to 90")
         if lon1 > 180 or lon1 < -180 or lon2 > 180 or lon2 < -180:
             flip = flip + 1 
-            warning_list.append("Longitudes must be in the range from -180 to 180")
         if flip > 0:
-            errorko = ""
-            self.invalid = True
-            for item in warning_list:
-                errorko = errorko + item + "\n"
-            msg = QMessageBox()
-            msg.setWindowTitle("Invalid Input")
-            msg.setIcon(QMessageBox.Critical)
-
-            msg.setText(errorko)
-            msg.exec_()
             return
 
         result = final_bearing(point1,point2)
@@ -391,21 +370,11 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         warning_list = []
         if lat1 > 90 or lat1 < -90 or lat2 > 90 or lat2 < -90:
             flip = flip + 1
-            warning_list.append("Latitudes must be in the range from -90 to 90")
+            
         if lon1 > 180 or lon1 < -180 or lon2 > 180 or lon2 < -180:
             flip = flip + 1 
-            warning_list.append("Longitudes must be in the range from -180 to 180")
+            
         if flip > 0:
-            errorko = ""
-            self.invalid = True
-            for item in warning_list:
-                errorko = errorko + item + "\n"
-            msg = QMessageBox()
-            msg.setWindowTitle("Invalid Input")
-            msg.setIcon(QMessageBox.Critical)
-
-            msg.setText(errorko)
-            msg.exec_()
             return
 
         result = calculate_midpoint(point1,point2)
@@ -503,7 +472,7 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         if lat1_deg < 0 or lat1_deg > 90 or lat2_deg < 0 or lat2_deg > 90:
             flip = flip + 1
             warning_list.append("Latitudes degrees must be in the range from 0 to 90")
-        if lon1_deg < 0 or lon1_deg > 180 or lon2_deg > 0 or lon2_deg > 180:
+        if lon1_deg < 0 or lon1_deg > 180 or lon2_deg < 0 or lon2_deg > 180:
             flip = flip + 1
             warning_list.append("Longitudes must be in the range from 0 to 180")
         if lat1_min > 59 or lon1_min > 59 or lat2_min >59 or lon2_min > 59:
