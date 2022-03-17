@@ -271,6 +271,27 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         point1 = lat1, lon1
         point2 = lat2, lon2
 
+        flip = 0 
+        warning_list = []
+        if lat1 > 90 or lat1 < -90 or lat2 > 90 or lat2 < -90:
+            flip = flip + 1
+            warning_list.append("Latitudes must be in the range from -90 to 90")
+        if lon1 > 180 or lon1 < -180 or lon2 > 180 or lon2 < -180:
+            flip = flip + 1 
+            warning_list.append("Longitudes must be in the range from -180 to 180")
+        if flip > 0:
+            errorko = ""
+            self.invalid = True
+            for item in warning_list:
+                errorko = errorko + item + "\n"
+            msg = QMessageBox()
+            msg.setWindowTitle("Invalid Input")
+            msg.setIcon(QMessageBox.Critical)
+
+            msg.setText(errorko)
+            msg.exec_()
+            return
+        self.invalid == False
         result = calculate_distance(point1,point2) # comes from haver.py
         #set the label
         self.label_2.setText(str(result))
@@ -278,9 +299,7 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     
     def find_azamith(self):  # azamith means initial bearing
-        degree_sign = u"\N{DEGREE SIGN}"
-
-        
+        degree_sign = u"\N{DEGREE SIGN}"    
         lat1 = float(self.lat1.text())
         lat2 = float(self.lat2.text())
         lon1 = float(self.lon1.text())
@@ -289,9 +308,28 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         point1 = lat1, lon1
         point2 = lat2, lon2
-        result = find_bearing(point1,point2)
-        
+        flip = 0 
+        warning_list = []
+        if lat1 > 90 or lat1 < -90 or lat2 > 90 or lat2 < -90:
+            flip = flip + 1
+            warning_list.append("Latitudes must be in the range from -90 to 90")
+        if lon1 > 180 or lon1 < -180 or lon2 > 180 or lon2 < -180:
+            flip = flip + 1 
+            warning_list.append("Longitudes must be in the range from -180 to 180")
+        if flip > 0:
+            errorko = ""
+            self.invalid = True
+            for item in warning_list:
+                errorko = errorko + item + "\n"
+            msg = QMessageBox()
+            msg.setWindowTitle("Invalid Input")
+            msg.setIcon(QMessageBox.Critical)
 
+            msg.setText(errorko)
+            msg.exec_()
+            return    
+        
+        result = find_bearing(point1,point2)
         #degree min sec
         result = str(result[0]) + degree_sign + " " + str(result[1]) + "\' " + str(result[2]) + "\'\'" 
 
@@ -301,10 +339,8 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         
     
-    def find_final_bearing(self):
+    def find_final_bearing(self): 
         degree_sign = u"\N{DEGREE SIGN}"
-
-
         lat1 = float(self.lat1.text())
         lon1 = float(self.lon1.text())
         lat2 = float(self.lat2.text())
@@ -312,6 +348,27 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         point1 = lat1, lon1
         point2 = lat2, lon2
+
+        flip = 0 
+        warning_list = []
+        if lat1 > 90 or lat1 < -90 or lat2 > 90 or lat2 < -90:
+            flip = flip + 1
+            warning_list.append("Latitudes must be in the range from -90 to 90")
+        if lon1 > 180 or lon1 < -180 or lon2 > 180 or lon2 < -180:
+            flip = flip + 1 
+            warning_list.append("Longitudes must be in the range from -180 to 180")
+        if flip > 0:
+            errorko = ""
+            self.invalid = True
+            for item in warning_list:
+                errorko = errorko + item + "\n"
+            msg = QMessageBox()
+            msg.setWindowTitle("Invalid Input")
+            msg.setIcon(QMessageBox.Critical)
+
+            msg.setText(errorko)
+            msg.exec_()
+            return
 
         result = final_bearing(point1,point2)
         
@@ -322,16 +379,34 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
 
     def find_midpoint(self):
-        degree_sign = u"\N{DEGREE SIGN}"
-        
-
-        
+        degree_sign = u"\N{DEGREE SIGN}"          
         lat1 = float(self.lat1.text())
         lon1 = float(self.lon1.text())
         lat2 = float(self.lat2.text())
         lon2 = float(self.lon2.text())
         point1 = lat1, lon1
         point2 = lat2, lon2
+
+        flip = 0 
+        warning_list = []
+        if lat1 > 90 or lat1 < -90 or lat2 > 90 or lat2 < -90:
+            flip = flip + 1
+            warning_list.append("Latitudes must be in the range from -90 to 90")
+        if lon1 > 180 or lon1 < -180 or lon2 > 180 or lon2 < -180:
+            flip = flip + 1 
+            warning_list.append("Longitudes must be in the range from -180 to 180")
+        if flip > 0:
+            errorko = ""
+            self.invalid = True
+            for item in warning_list:
+                errorko = errorko + item + "\n"
+            msg = QMessageBox()
+            msg.setWindowTitle("Invalid Input")
+            msg.setIcon(QMessageBox.Critical)
+
+            msg.setText(errorko)
+            msg.exec_()
+            return
 
         result = calculate_midpoint(point1,point2)
 
@@ -343,11 +418,8 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         
 
     def calculate_destination_point(self):
+      
         degree_sign = u"\N{DEGREE SIGN}"
-
-
-        
-
         start_lat = float(self.start_lat_lineedit.text())
         start_lon = float(self.start_longitude_lineedit.text())
         distance = float(self.distance_lineEdit.text()) # in km
@@ -355,6 +427,34 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         start_point = start_lat , start_lon
         
+        flip = 0 
+        warning_list = []
+        if start_lat > 90 or start_lat < -90 :
+            flip = flip + 1
+            warning_list.append("Latitude must be in the range from -90 to 90")
+        if start_lon > 180 or start_lon < -180:
+            flip = flip + 1 
+            warning_list.append("Longitude must be in the range from -180 to 180")
+        if azamith < -180 or azamith > 180:
+            flip = flip + 1
+            warning_list.append("Azamith must be in the range from -180 to 180")
+        if distance > 6371 or distance < 0:
+            flip = flip + 1
+            warning_list.append("Distance must be in the range from 0 to 6371 km")
+        if flip > 0:
+            errorko = ""
+            self.invalid = True
+            for item in warning_list:
+                errorko = errorko + item + "\n"
+            msg = QMessageBox()
+            msg.setWindowTitle("Invalid Input")
+            msg.setIcon(QMessageBox.Critical)
+
+            msg.setText(errorko)
+            msg.exec_()
+            return
+
+
         x = find_destination_point(start_point, distance, azamith)
         
 
@@ -377,9 +477,6 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.final_bearing_value_label.setText(result_fbearing)
 
     #functions for tab2
-    def foo(self):
-        self.distance_value_label.setText("omer")
-
 
     def display_distance_tab2(self):
         self.invalid = False
@@ -403,7 +500,12 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         flip = 0 # if it is 0 , all inputs are valid
         warning_list = []
-        
+        if lat1_deg < 0 or lat1_deg > 90 or lat2_deg < 0 or lat2_deg > 90:
+            flip = flip + 1
+            warning_list.append("Latitudes degrees must be in the range from 0 to 90")
+        if lon1_deg < 0 or lon1_deg > 180 or lon2_deg > 0 or lon2_deg > 180:
+            flip = flip + 1
+            warning_list.append("Longitudes must be in the range from 0 to 180")
         if lat1_min > 59 or lon1_min > 59 or lat2_min >59 or lon2_min > 59:
             flip = flip + 1
             warning_list.append("Minutes must be in 0-59")
@@ -414,7 +516,6 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         
         if flip > 0:
             errorko = ""
-            self.invalid = True
             for item in warning_list:
                 errorko = errorko + item + "\n"
             msg = QMessageBox()
@@ -432,8 +533,7 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
 
     def display_azamith_tab2(self):
-        if self.invalid == True:
-            return
+
         lat1_deg = float(self.lat1_deg_lineedit.text())
         lat1_min = float(self.lat1_min_lineedit.text())
         lat1_sec = float(self.lat1_sec_lineedit.text())
@@ -451,6 +551,33 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         lon1_dir = self.point1_lon_dir.currentText()
         lat2_pole = self.point2_lat_pole.currentText()
         lon2_dir = self.point2_lon_dir.currentText()
+
+        flip = 0 
+        warning_list = []
+        if lat1_deg > 90 or lat1_deg < 0 or lat2_deg > 90 or lat2_deg < 0:
+            flip = flip + 1
+            warning_list.append("Latitudes must be in the range from 0 to 90")
+        if lon1_deg > 180 or lon1_deg < 0 or lon2_deg > 180 or lon2_deg < 0:
+            flip = flip + 1 
+            warning_list.append("Longitudes must be in the range from 0 to 180")
+        if lat1_min > 59 or lat1_min < 0 or lat2_min > 59 or lat2_min < 0:
+            flip = flip + 1 
+            warning_list.append("Minutes must be in the range from 0 to 59")
+        if lat1_sec > 59 or lat1_sec < 0 or lat2_sec > 59 or lat2_sec < 0:
+            flip = flip + 1
+            warning_list.append("Seconds must be in the range from 0 to 59")
+        if flip > 0:
+            errorko = ""
+            self.invalid = True
+            for item in warning_list:
+                errorko = errorko + item + "\n"
+            msg = QMessageBox()
+            msg.setWindowTitle("Invalid Input")
+            msg.setIcon(QMessageBox.Critical)
+
+            msg.setText(errorko)
+            msg.exec_()
+            return
 
         azamith = calculate_azamith_tab2(lat1_deg, lat1_min,lat1_sec,lon1_deg,lon1_min,lon1_sec,lat2_deg,lat2_min,lat2_sec,lon2_deg,lon2_min,lon2_sec,lat1_pole,lon1_dir,lat2_pole,lon2_dir)
         self.bearing_value_label.setText(str(azamith))
@@ -458,8 +585,7 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
 
     def display_final_bearing_tab2(self):
-        if self.invalid == True:
-            return 
+
         lat1_deg = float(self.lat1_deg_lineedit.text())
         lat1_min = float(self.lat1_min_lineedit.text())
         lat1_sec = float(self.lat1_sec_lineedit.text())
@@ -476,15 +602,37 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         lon1_dir = self.point1_lon_dir.currentText()
         lat2_pole = self.point2_lat_pole.currentText()
         lon2_dir = self.point2_lon_dir.currentText()
+        flip = 0 
+        warning_list = []
+        if lat1_deg > 90 or lat1_deg < 0 or lat2_deg > 90 or lat2_deg < 0:
+            flip = flip + 1
+            warning_list.append("Latitudes must be in the range from 0 to 90")
+        if lon1_deg > 180 or lon1_deg < 0 or lon2_deg > 180 or lon2_deg < 0:
+            flip = flip + 1 
+            warning_list.append("Longitudes must be in the range from 0 to 180")
+        if lat1_min > 59 or lat1_min < 0 or lat2_min > 59 or lat2_min < 0:
+            flip = flip + 1 
+            warning_list.append("Minutes must be in the range from 0 to 59")
+        if lat1_sec > 59 or lat1_sec < 0 or lat2_sec > 59 or lat2_sec < 0:
+            flip = flip + 1
+            warning_list.append("Seconds must be in the range from 0 to 59")
+        if flip > 0:
+            errorko = ""
+            self.invalid = True
+            for item in warning_list:
+                errorko = errorko + item + "\n"
+            msg = QMessageBox()
+            msg.setWindowTitle("Invalid Input")
+            msg.setIcon(QMessageBox.Critical)
 
+            msg.setText(errorko)
+            msg.exec_()
+            return        
         result = calculate_final_bearing_tab2(lat1_deg, lat1_min,lat1_sec,lon1_deg,lon1_min,lon1_sec,lat2_deg,lat2_min,lat2_sec,lon2_deg,lon2_min,lon2_sec,lat1_pole,lon1_dir,lat2_pole,lon2_dir)
         self.final_bearing_value_tab2_label.setText(str(result))
 
     def display_midpoint_tab2(self):
-        if self.invalid == True:
-            return
         degree_sign = u"\N{DEGREE SIGN}"
-
         lat1_deg = float(self.lat1_deg_lineedit.text())
         lat1_min = float(self.lat1_min_lineedit.text())
         lat1_sec = float(self.lat1_sec_lineedit.text())
@@ -501,7 +649,32 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         lon1_dir = self.point1_lon_dir.currentText()
         lat2_pole = self.point2_lat_pole.currentText()
         lon2_dir = self.point2_lon_dir.currentText()
+        flip = 0 
+        warning_list = []
+        if lat1_deg > 90 or lat1_deg < 0 or lat2_deg > 90 or lat2_deg < 0:
+            flip = flip + 1
+            warning_list.append("Latitudes must be in the range from 0 to 90")
+        if lon1_deg > 180 or lon1_deg < 0 or lon2_deg > 180 or lon2_deg < 0:
+            flip = flip + 1 
+            warning_list.append("Longitudes must be in the range from 0 to 180")
+        if lat1_min > 59 or lat1_min < 0 or lat2_min > 59 or lat2_min < 0:
+            flip = flip + 1 
+            warning_list.append("Minutes must be in the range from 0 to 59")
+        if lat1_sec > 59 or lat1_sec < 0 or lat2_sec > 59 or lat2_sec < 0:
+            flip = flip + 1
+            warning_list.append("Seconds must be in the range from 0 to 59")
+        if flip > 0:
+            errorko = ""
+            self.invalid = True
+            for item in warning_list:
+                errorko = errorko + item + "\n"
+            msg = QMessageBox()
+            msg.setWindowTitle("Invalid Input")
+            msg.setIcon(QMessageBox.Critical)
 
+            msg.setText(errorko)
+            msg.exec_()
+            return
         result = calculate_mid_point_tab2(lat1_deg,lat1_min,lat1_sec,lon1_deg,lon1_min,lon1_sec,lat2_deg,lat2_min,lat2_sec,lon2_deg,lon2_min,lon2_sec,lat1_pole,lon1_dir,lat2_pole,lon2_dir)
         lat_res = result[0]
         lat_res_deg  = lat_res[0][0]
@@ -525,7 +698,6 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def display_endpoint_and_bearing_tab2(self):
         degree_sign = u"\N{DEGREE SIGN}"
-
         lat_deg = float(self.startpoint_lat_deg_lineedit_tab2.text())
         lat_min = float(self.startpoint_lat_min_lineedit_tab2.text())
         lat_sec = float(self.startpoint_lat_sec_lineedit_tab2.text())
