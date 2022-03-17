@@ -589,8 +589,9 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     
 
-# function of tab3 - finding intersection point
+# function of tab3 - finding intersection point when parameters are in dd format
     def display_intersection_point_dd(self):
+        degree_sign = u"\N{DEGREE SIGN}"
         lat1 = float(self.lat1_dd_tab3.text())
         lat2 = float(self.lat2_dd_tab3.text())
         lon1 = float(self.lon1_dd_tab3.text())
@@ -610,7 +611,7 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             intersection_lon_sec = str(result[1][0][2])
             pole = str(result[0][1])
             direction = str(result[1][1])
-            self.intersection_point_value_label.setText(intersection_lat_deg + " " + intersection_lat_min + " "+ intersection_lat_sec + " "+pole+" - " + intersection_lon_deg + " "+ intersection_lon_min + " "+ intersection_lon_sec + " " + direction)
+            self.intersection_point_value_label.setText(intersection_lat_deg + degree_sign +" " + intersection_lat_min + "\'"+" "+ intersection_lat_sec + "\'\' "+" "+pole+"  ,  " + intersection_lon_deg + degree_sign+" "+ intersection_lon_min + "\'"+" "+ intersection_lon_sec + " \'\' " + direction)
         else:
             print(len(result))
             value = str(result[0])
@@ -618,6 +619,8 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.intersection_point_value_label.setText(value)
     #find intersection point when the paramaters are in dms format
     def display_intersection_point_dms(self):
+        degree_sign = u"\N{DEGREE SIGN}"
+
         lat1_deg = float(self.lat1_deg_dms_tab3.text())
         lat1_min = float(self.lat1_min_dms_tab3.text())
         lat1_sec = float(self.lat1_sec_dms_tab3.text())
@@ -694,7 +697,7 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             intersection_lon_sec = str(intersection_point[1][0][2])
             pole = str(intersection_point[0][1])
             direction = str(intersection_point[1][1])
-            self.intersection_value_dms_label.setText(intersection_lat_deg + " " + intersection_lat_min + " "+ intersection_lat_sec + " "+pole+" - " + intersection_lon_deg + " "+ intersection_lon_min + " "+ intersection_lon_sec + " " + direction)
+            self.intersection_value_dms_label.setText(intersection_lat_deg + degree_sign+" " + intersection_lat_min + " \' "+ intersection_lat_sec + " \'\' "+pole+"  ,  " + intersection_lon_deg + degree_sign+" "+ intersection_lon_min + " '\ "+ intersection_lon_sec + " '\'\ " + direction)
         else:
             print(len(intersection_point))
             value = str(intersection_point[0])
