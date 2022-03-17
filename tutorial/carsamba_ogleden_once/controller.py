@@ -19,7 +19,7 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
 
         
-
+        #set values for comboboxes
         self.point1_lat_pole.addItems(["N","S"])
         self.point1_lon_dir.addItems(["E","W"])
         self.point2_lat_pole.addItems(["N","S"])
@@ -27,6 +27,10 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.start_point_lat_combo.addItems(["N","S"])
         self.start_point_lon_combo.addItems(["E","W"])
         
+        self.point1_pole_tab3.addItems(["N","S"])
+        self.point1_direction_tab3.addItems(["E","W"])
+        self.point2_pole_tab3.addItems(["N","S"])
+        self.point2_direction_tab3.addItems(["E","W"])
 
         #validator for lat and lon for tab1's inputs 
         lat_validator = QtGui.QDoubleValidator(-90,90,4)
@@ -80,12 +84,34 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
 
         #set validators for lineedit inputs - tab3 - intersection point
+        #dd variables
         self.lat1_dd_tab3.setValidator(lat_validator)
         self.lat2_dd_tab3.setValidator(lat_validator)
         self.lon1_dd_tab3.setValidator(lon_validator)
         self.lon2_dd_tab3.setValidator(lon_validator)
         self.bearing1_dd_tab3.setValidator(lon_validator)
         self.bearing2_dd_tab3.setValidator(lon_validator)
+        #dms variables
+        self.lat1_deg_dms_tab3.setValidator(lat_deg_validator)
+        self.lat1_min_dms_tab3.setValidator(min_validator)
+        self.lat1_sec_dms_tab3.setValidator(sec_validator)
+        self.lon1_deg_dms_tab3.setValidator(lon_deg_validator)
+        self.lon1_min_dms_tab3.setValidator(min_validator)
+        self.lon1_sec_dms_tab3.setValidator(sec_validator)
+        self.lat2_deg_dms_tab3.setValidator(lat_deg_validator)
+        self.lat2_min_dms_tab3.setValidator(min_validator)
+        self.lat2_sec_dms_tab3.setValidator(sec_validator)
+        self.lon2_deg_dms_tab3.setValidator(lon_deg_validator)
+        self.lon2_min_dms_tab3.setValidator(min_validator)
+        self.lon2_sec_dms_tab3.setValidator(sec_validator)
+        self.bearing1_deg_dms_tab3.setValidator(lon_deg_validator)
+        self.bearing1_min_dms_tab3.setValidator(min_validator)
+        self.bearing1_sec_dms_tab3.setValidator(sec_validator)
+        self.bearing2_deg_dms_tab3.setValidator(lon_deg_validator)
+        self.bearing2_min_dms_tab3.setValidator(min_validator)
+        self.bearing2_sec_dms_tab3.setValidator(sec_validator)
+
+
 
 
         #default values for tab1 
@@ -126,13 +152,34 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.distance_lineedit_tab2.setText(str(round(random.uniform(0,3500),0)))
 
         #default values for tab3
-        self.lat1_dd_tab3.setText(str(round(random.uniform(-90,90,))))
+        #dd variables
+        self.lat1_dd_tab3.setText(str(round(random.uniform(-90,90))))
         self.lat2_dd_tab3.setText(str(round(random.uniform(-90,90))))
         self.lon1_dd_tab3.setText(str(round(random.uniform(-180,180))))
         self.lon2_dd_tab3.setText(str(round(random.uniform(-180,180))))
         self.bearing1_dd_tab3.setText(str(round(random.uniform(-180,180))))
         self.bearing2_dd_tab3.setText(str(round(random.uniform(-180,180))))
-
+        #dms variables
+        self.lat1_deg_dms_tab3.setText(str(round(random.uniform(0,90))))
+        self.lat1_min_dms_tab3.setText(str(round(random.uniform(0,59))))
+        self.lat1_sec_dms_tab3.setText(str(round(random.uniform(0,59),0)))
+        self.lon1_deg_dms_tab3.setText(str(round(random.uniform(0,180))))
+        self.lon1_min_dms_tab3.setText(str(round(random.uniform(0,59))))
+        self.lon1_sec_dms_tab3.setText(str(round(random.uniform(0,59),0)))
+        
+        self.lat2_deg_dms_tab3.setText(str(round(random.uniform(0,90))))
+        self.lat2_min_dms_tab3.setText(str(round(random.uniform(0,59))))
+        self.lat2_sec_dms_tab3.setText(str(round(random.uniform(0,59),0)))
+        self.lon2_deg_dms_tab3.setText(str(round(random.uniform(0,180))))
+        self.lon2_min_dms_tab3.setText(str(round(random.uniform(0,59))))
+        self.lon2_sec_dms_tab3.setText(str(round(random.uniform(0,59),0)))
+        
+        self.bearing1_deg_dms_tab3.setText(str(round(random.uniform(0,180))))
+        self.bearing1_min_dms_tab3.setText(str(round(random.uniform(0,59))))
+        self.bearing1_sec_dms_tab3.setText(str(round(random.uniform(0,59),0)))
+        self.bearing2_deg_dms_tab3.setText(str(round(random.uniform(0,180))))
+        self.bearing2_min_dms_tab3.setText(str(round(random.uniform(0,59))))
+        self.bearing2_sec_dms_tab3.setText(str(round(random.uniform(0,59),0)))
         #buttons for tab1
         self.calculate_button.clicked.connect(self.find_distance)
         self.calculate_button.clicked.connect(self.find_azamith)
