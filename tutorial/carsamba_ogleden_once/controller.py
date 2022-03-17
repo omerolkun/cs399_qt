@@ -6,7 +6,7 @@ from PySide2 import QtWidgets,QtGui
 from ui import Ui_MainWindow
 import math
 import random
-from haver import calculate_midpoint, convert_to_radian, find_bearing, radian_to_degree, dd_to_dms, calculate_distance,final_bearing, calculate_distance_tab2,calculate_azamith_tab2,calculate_final_bearing_tab2,calculate_mid_point_tab2,wrap90_helper,wrap180_helper,find_intersection_point
+from haver import calculate_midpoint, convert_to_radian, find_bearing, radian_to_degree, dd_to_dms, calculate_distance,final_bearing, calculate_distance_tab2,calculate_azamith_tab2,calculate_final_bearing_tab2,calculate_mid_point_tab2,wrap90_helper,wrap180_helper,find_intersection_point,dms_to_dd
 from dest_and_final_bearing import calculate_destinaion_point, find_destination_point
 from PyQt5.QtWidgets import QMessageBox
 
@@ -196,6 +196,7 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         
         #buttons for tab3
         self.calculate_inter_point_button.clicked.connect(self.display_intersection_point_dd)
+        self.calculate_intersection_dms_button.clicked.connect(self.display_intersection_point_dms)
 #for tab1
     def wrap90(self):
         if self.lat1.text() == "":
@@ -615,6 +616,93 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             value = str(result[0])
             print(value)
             self.intersection_point_value_label.setText(value)
+    #find intersection point when the paramaters are in dms format
+    def display_intersection_point_dms(self):
+        lat1_deg = float(self.lat1_deg_dms_tab3.text())
+        lat1_min = float(self.lat1_min_dms_tab3.text())
+        lat1_sec = float(self.lat1_sec_dms_tab3.text())
+        point1_pole = str(self.point1_pole_tab3.currentText())
+        lon1_deg = float(self.lon1_deg_dms_tab3.text())
+        lon1_min = float(self.lon1_min_dms_tab3.text())
+        lon1_sec = float(self.lon1_sec_dms_tab3.text())
+        point1_direction = str(self.point1_direction_tab3.currentText())
+        lat2_deg = float(self.lat2_deg_dms_tab3.text())
+        lat2_min = float(self.lat2_min_dms_tab3.text())
+        lat2_sec = float(self.lat2_sec_dms_tab3.text())
+        point2_pole = str(self.point2_pole_tab3.currentText())
+        lon2_deg = float(self.lon2_deg_dms_tab3.text())
+        lon2_min = float(self.lon2_min_dms_tab3.text())
+        lon2_sec = float(self.lon2_sec_dms_tab3.text())
+        point2_direction = str(self.point2_direction_tab3.currentText())
+        b1_deg = float(self.bearing1_deg_dms_tab3.text())
+        b1_min = float(self.bearing1_min_dms_tab3.text())
+        b1_sec = float(self.bearing1_sec_dms_tab3.text())
+        b2_deg = float(self.bearing2_deg_dms_tab3.text())
+        b2_min = float(self.bearing2_min_dms_tab3.text())
+        b2_sec = float(self.bearing2_sec_dms_tab3.text())
+
+        flip = 0 # if it is 0 , all inputs are valid
+        warning_list = []
+        
+        if lat1_min > 59 or lon1_min > 59 or lat2_min >59 or lon2_min > 59:
+            flip = flip + 1
+            warning_list.append("Minutes must be in 0-59")
+            
+        if lat1_sec > 59 or lon1_sec > 59 or lat2_sec > 59 or lon2_sec > 59:
+            flip = flip + 1
+            warning_list.append("Seconds must be in 0-59")
+        
+        if flip > 0:
+            errorko = ""
+            self.invalid = True
+            for item in warning_list:
+                errorko = errorko + item + "\n"
+            msg = QMessageBox()
+            msg.setWindowTitle("Invalid Input")
+            msg.setIcon(QMessageBox.Critical)
+
+            msg.setText(errorko)
+            msg.exec_()
+            return
+
+
+        lat1_dd = dms_to_dd(lat1_deg, lat1_min,lat1_sec)
+        if point1_pole == "S":
+            lat1_dd = -1 * lat1_dd
+        lon1_dd = dms_to_dd(lon1_deg, lon1_min, lon1_sec)
+        if point1_direction == "W":
+            lon1_dd = -1 * lon1_dd
+        lat2_dd = dms_to_dd(lat2_deg, lat2_min, lat2_sec)
+        if point2_pole == "S":
+            lat2_dd = -1 * lat2_dd
+        lon2_dd = dms_to_dd(lon2_deg, lon2_min, lon2_sec)
+        if point2_direction == "W":
+            lon2_dd = -1 * lon2_dd
+        
+        bearing1_dd = dms_to_dd(b1_deg, b1_min, b1_sec)
+        bearing2_dd = dms_to_dd(b2_deg, b2_min, b2_sec)
+
+        intersection_point = find_intersection_point(lat1_dd, lon1_dd, lat2_dd, lon2_dd, bearing1_dd, bearing2_dd)
+
+
+        if len(intersection_point) == 2:
+            intersection_lat_deg = str(intersection_point[0][0][0])
+            intersection_lat_min = str(intersection_point[0][0][1])
+            intersection_lat_sec = str(intersection_point[0][0][2])
+            intersection_lon_deg = str(intersection_point[1][0][0])
+            intersection_lon_min = str(intersection_point[1][0][1])
+            intersection_lon_sec = str(intersection_point[1][0][2])
+            pole = str(intersection_point[0][1])
+            direction = str(intersection_point[1][1])
+            self.intersection_value_dms_label.setText(intersection_lat_deg + " " + intersection_lat_min + " "+ intersection_lat_sec + " "+pole+" - " + intersection_lon_deg + " "+ intersection_lon_min + " "+ intersection_lon_sec + " " + direction)
+        else:
+            print(len(intersection_point))
+            value = str(intersection_point[0])
+            print(value)
+            self.intersection_value_dms_label.setText(value)
+
+
+
 
 app = QtWidgets.QApplication(sys.argv)
 window = ModiWindow()
