@@ -599,6 +599,33 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         b1 = float (self.bearing1_dd_tab3.text())
         b2 = float(self.bearing2_dd_tab3.text())
 
+
+        flip = 0 
+        warning_list = []
+        if lat1 > 90 or lat2 > 90 or lat1 < -90 or lat2 < -90:
+            flip = flip + 1
+            warning_list.append("Latitudes must be in the range from  -90  to 90")
+        if lon1 > 180 or lon2 > 180 or lon1 < -180 or lon1 < -180:
+            flip = flip + 1 
+            warning_list.append("Longitudes must be in the range from -180 to 180")
+        if b1 > 180 or b1 <-180 or b2 > 180 or b2 < -180:
+            flip = flip  + 1 
+            warning_list.append("Bearing must be in the range of -180 to 180")
+        if flip > 0:
+            errorko = ""
+            self.invalid = True
+            for item in warning_list:
+                errorko = errorko + item + "\n"
+            msg = QMessageBox()
+            msg.setWindowTitle("Invalid Input")
+            msg.setIcon(QMessageBox.Critical)
+
+            msg.setText(errorko)
+            msg.exec_()
+            return
+
+
+
         result = find_intersection_point(lat1,lon1,lat2,lon2,b1,b2)
         print(len(result))
         if len(result) == 2:
@@ -646,11 +673,18 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         flip = 0 # if it is 0 , all inputs are valid
         warning_list = []
-        
+        if lat1_deg > 90 or lat2_deg > 90:
+            flip = flip + 1
+            warning_list.append("Latitude degrees must be in 0-90")
+        if lon1_deg > 180 or lon2_deg > 180:
+            flip = flip + 1
+            warning_list.append("Longitude degrees must be in 0-180")
+        if b1_deg > 180 or b2_deg > 180:
+            flip = flip + 1
+            warning_list.append("Bearing degrees must be in 0-180")
         if lat1_min > 59 or lon1_min > 59 or lat2_min >59 or lon2_min > 59:
             flip = flip + 1
             warning_list.append("Minutes must be in 0-59")
-            
         if lat1_sec > 59 or lon1_sec > 59 or lat2_sec > 59 or lon2_sec > 59:
             flip = flip + 1
             warning_list.append("Seconds must be in 0-59")
@@ -697,7 +731,7 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             intersection_lon_sec = str(intersection_point[1][0][2])
             pole = str(intersection_point[0][1])
             direction = str(intersection_point[1][1])
-            self.intersection_value_dms_label.setText(intersection_lat_deg + degree_sign+" " + intersection_lat_min + " \' "+ intersection_lat_sec + " \'\' "+pole+"  ,  " + intersection_lon_deg + degree_sign+" "+ intersection_lon_min + " '\ "+ intersection_lon_sec + " '\'\ " + direction)
+            self.intersection_value_dms_label.setText(intersection_lat_deg + degree_sign+" " + intersection_lat_min + " \' "+ intersection_lat_sec + " \'\' "+pole+"  ,  " + intersection_lon_deg + degree_sign+" "+ intersection_lon_min + " \' "+ intersection_lon_sec + " '\'\' " + direction)
         else:
             print(len(intersection_point))
             value = str(intersection_point[0])
