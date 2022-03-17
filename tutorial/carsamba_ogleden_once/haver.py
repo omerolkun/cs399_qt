@@ -67,12 +67,12 @@ def find_intersection_point(lat1,lon1,lat2,lon2,b1,b2):
     delta_phi = phi_2 - phi_1
     delta_lambda = lambda_2 - lambda_1
 
-
+    result_list  = []
     sigma12 = 2 * math.asin(math.sqrt(math.sin(delta_phi/2) * math.sin(delta_phi/2) + math.cos(phi_1) * math.cos(phi_2) * math.sin(delta_lambda/2) * math.sin(delta_lambda/2)))
     print(sys.float_info.epsilon)
     if abs(sigma12)  < sys.float_info.epsilon:
-        print("coincident points")
-        return 
+        result_list.append("coendiets")
+        return result_list
     
 
     cos_teta_a = (math.sin(phi_2) - math.sin(phi_1) * math.cos(sigma12)) / (math.sin(sigma12) *  math.cos(phi_1))
@@ -98,12 +98,12 @@ def find_intersection_point(lat1,lon1,lat2,lon2,b1,b2):
 
 
     if (math.sin(alfa_1) == 0 and math.sin(alfa_2) == 0):
-        print("b")
+        result_list.append("B")
         return
     
     if (math.sin(alfa_1) * math.sin(alfa_2) < 0) :
-        print("c")
-        return
+        result_list.append("[ambigious]")
+        return result_list
 
 
     
@@ -119,11 +119,27 @@ def find_intersection_point(lat1,lon1,lat2,lon2,b1,b2):
 
     result_lat = radian_to_degree(phi_3)
     result_lon = radian_to_degree(lambda_3)
-    dms_lat = dd_to_dms(result_lat)
-    dms_lon = dd_to_dms(result_lon)
+    if result_lat < 0:
+        result_lat = result_lat * -1
+        pole = "S"
+    else:
+        pole = "N"
+
+    if result_lon < 0:
+        result_lon = -1 * result_lon
+        direction = "W"
+    else:
+        direction = "E"
+    dms_lat = (dd_to_dms(result_lat) , pole)
+    dms_lon = (dd_to_dms(result_lon)) ,direction
     print("result lat = ",dms_lat)
     print("result lon = ",dms_lon)
-    return dms_lat, dms_lon
+    point = dms_lat, dms_lon
+    result_list.append(dms_lat)
+    result_list.append(dms_lon)
+    print("result point" , point)
+    print("result_list is ",result_list)
+    return result_list
 
 
 
