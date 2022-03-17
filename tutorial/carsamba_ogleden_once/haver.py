@@ -341,7 +341,7 @@ def calculate_distance(point1, point2):
     result = R * c
     
     #return result
-    return (round(result/1000,0))
+    return (round(result/1000,-1))
 
 
 
@@ -512,6 +512,8 @@ if __name__ == "__main__":
 
 
 
+    point1 = (64.526, 174.548)
+    point2  = (23.478, 6.013)
 
 
 
@@ -520,7 +522,13 @@ if __name__ == "__main__":
     point1 = lat1, lon1
     point2 = lat2, lon2
 
-'''    print("point1 :" , point1)
+
+
+    point1 = (84.626, -30.859)
+    point2  = (-50.181, 108.719)
+
+
+    print("point1 :" , point1)
     print("point2 : ", point2)
 
     print( "---------\nDISTANCE: ", calculate_distance(point1,point2))
@@ -533,7 +541,7 @@ if __name__ == "__main__":
 
     print("Mid point is ", calculate_midpoint(point1,point2))
 
-'''
+
 
 
 
