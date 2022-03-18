@@ -49,6 +49,12 @@ def dd_to_dms(value):
 
 #tab3 functions 
 def find_intersection_point(lat1,lon1,lat2,lon2,b1,b2):
+    print("lat1 :",lat1)
+    print("lat2 :", lat2)
+    print("lon1 :" ,lon1)
+    print("lon2 :",lon2)
+    print("b1 : ",b1)
+    print("b2 :",b2)
     phi_1 = convert_to_radian(lat1)
     phi_2 = convert_to_radian(lat2)
     lambda_1 = convert_to_radian(lon1)
@@ -66,22 +72,28 @@ def find_intersection_point(lat1,lon1,lat2,lon2,b1,b2):
 
     delta_phi = phi_2 - phi_1
     delta_lambda = lambda_2 - lambda_1
-
+    print("delta phi : ",delta_phi)
+    print("delta lambda : ", delta_lambda)
+    print("---")
     result_list  = []
     sigma12 = 2 * math.asin(math.sqrt(math.sin(delta_phi/2) * math.sin(delta_phi/2) + math.cos(phi_1) * math.cos(phi_2) * math.sin(delta_lambda/2) * math.sin(delta_lambda/2)))
     print(sys.float_info.epsilon)
     if abs(sigma12)  < sys.float_info.epsilon:
         result_list.append("coendiets")
         return result_list
-    
 
+    print("sigma12 : ",sigma12)
     cos_teta_a = (math.sin(phi_2) - math.sin(phi_1) * math.cos(sigma12)) / (math.sin(sigma12) *  math.cos(phi_1))
     cos_teta_b = (math.sin(phi_1) - math.sin(phi_2) * math.cos(sigma12)) / (math.sin(sigma12) * math.cos(phi_2));
-     
+    
+    print("cos teta a : ", cos_teta_a)
+    print("cos teta b : ", cos_teta_b)
 
-    teta_a = math.acos( min(max(cos_teta_a, -1),1))
-    teta_b = math.acos (min(max(cos_teta_b, -1),1))
+    teta_a = math.acos( min( max ( cos_teta_a, -1 ), 1 ) )
+    teta_b = math.acos( min( max ( cos_teta_b, -1 ), 1 ) )
 
+    print("tata a ", teta_a)
+    print("teta b ", teta_b)
     if math.sin(lambda_2 - lambda_1) > 0:
         teta12 = teta_a
     else: 
@@ -91,11 +103,13 @@ def find_intersection_point(lat1,lon1,lat2,lon2,b1,b2):
         teta21 = 2 * math.pi - teta_b
     else:
         teta21 = teta_b
-    
+    print("teta12 : ", teta12)
+    print("teta21 : ", teta21)
     alfa_1 = teta13 - teta12
     alfa_2 = teta21 - teta23
     
-
+    print("alfa 1 : " , alfa_1)
+    print("alfa 2 : ", alfa_2)
 
     if (math.sin(alfa_1) == 0 and math.sin(alfa_2) == 0):
         result_list.append("B")
@@ -110,26 +124,34 @@ def find_intersection_point(lat1,lon1,lat2,lon2,b1,b2):
     cos_alfa3 = -1 * math.cos(alfa_1) * math.cos(alfa_2) + math.sin(alfa_1) * math.sin(alfa_2) * math.cos(sigma12)
     sigma13  =  math.atan2( math.sin(sigma12) * math.sin(alfa_1)* math.sin(alfa_2), math.cos(alfa_2) + math.cos(alfa_1)*cos_alfa3)
 
-    
+    print("cos alfa3 : ", cos_alfa3)
+    print("sigma13 : ", sigma13)
     phi_3 = math.asin(min(max(math.sin(phi_1)* math.cos(sigma13) + math.cos(phi_1) * math.sin(sigma13) * math.cos(teta13), -1),1))
 
     delta_lambda13 = math.atan2(math.sin(teta13) * math.sin(sigma13) * math.cos(phi_1), math.cos(sigma13) - math.sin(phi_1)* math.sin(phi_3))
-
+    print("phi 3 : " ,phi_3)
+    print("delta lambda13 : " , delta_lambda13)
+    # convert to degrees and then use (θ+360) % 360
     lambda_3 = lambda_1 + delta_lambda13
-
+    print("lambda3 ",lambda_3)
     result_lat = radian_to_degree(phi_3)
     result_lon = radian_to_degree(lambda_3)
+    result_lon = (result_lon + 360) % 360
+    print("lat : ", result_lat)
+    print("lon : ", result_lon)
+   
     if result_lat < 0:
         result_lat = result_lat * -1
         pole = "S"
     else:
         pole = "N"
-
+    print("result lon" , result_lon)
     if result_lon < 0:
         result_lon = -1 * result_lon
         direction = "W"
     else:
         direction = "E"
+    print("---INFO---")
     dms_lat = (dd_to_dms(result_lat) , pole)
     dms_lon = (dd_to_dms(result_lon)) ,direction
     print("result lat = ",dms_lat)
@@ -139,9 +161,17 @@ def find_intersection_point(lat1,lon1,lat2,lon2,b1,b2):
     result_list.append(dms_lon)
     print("result point" , point)
     print("result_list is ",result_list)
-    return result_list
+    print("---INFO-ends---")
+    #return result_list
 
 
+lat1 = 34
+lon1 = -122
+lat2 = 57
+lon2 = -171
+b1 = -121
+b2 = -131
+find_intersection_point(lat1,lon1,lat2,lon2,b1,b2)
 
 
 
@@ -341,7 +371,7 @@ def calculate_distance(point1, point2):
     result = R * c
     
     #return result
-    return (round(result/1000,-1))
+    return (round(result/1000,4))
 
 
 
@@ -503,45 +533,23 @@ if __name__ == "__main__":
     '''
 
 
-    lat1 = round(random.uniform(-90,90),3)
-    lon1 = round(random.uniform(-180,180),3)
+    #lat1 = round(random.uniform(-90,90),3)
+    #lon1 = round(random.uniform(-180,180),3)
+    #lat2 = round(random.uniform(-90,90),3)
+    #lon2 = round(random.uniform(-180,180),3)
+    #point1 = (64.526, 174.548)
+    #point2  = (23.478, 6.013)
+    #point1 = lat1, lon1
+    #point2 = lat2, lon2
+   # point1 = (76.70056, 145.7372 )
+  #  point2  = (34.33361, 65.7025)
+ #   print("point1 :" , point1)
+#    print("point2 : ", point2)
 
-    lat2 = round(random.uniform(-90,90),3)
-    lon2 = round(random.uniform(-180,180),3)
-
-
-
-
-    point1 = (64.526, 174.548)
-    point2  = (23.478, 6.013)
-
-
-
-
-
-    point1 = lat1, lon1
-    point2 = lat2, lon2
-
-
-
-    point1 = (84.626, -30.859)
-    point2  = (-50.181, 108.719)
-
-
-    print("point1 :" , point1)
-    print("point2 : ", point2)
-
-    print( "---------\nDISTANCE: ", calculate_distance(point1,point2))
-    print("Inital bearing: ",find_bearing(point1,point2))
-    print("Final bearing : ", final_bearing(point1,point2))
-
-
-
-
-
-    print("Mid point is ", calculate_midpoint(point1,point2))
-
-
+    #print( "---------\nDISTANCE: ", calculate_distance(point1,point2))
+    #print("Inital bearing: ",find_bearing(point1,point2))
+    #print("Final bearing : ", final_bearing(point1,point2))
+    #print("Mid point is ", calculate_midpoint(point1,point2))
 
 
 
