@@ -8,26 +8,14 @@ point1 = 0,0
 point2 = 0,0
 
 R = 6371000 # in meters
-
-def wrap90_helper(degree):
-    if float(degree) >= -90 and float(degree) <= 90:
-       return float(degree)
-       
-    x  = degree
-    a = 90
-    p = 360
-    result = float ( float(4*a/p) * abs((((x-p/4)%p)+p)%p - p/2) - a )
-   
-    return result
-
-
-def wrap180_helper(degree):
-    if degree>=-180 and degree <= 180:
-        return float(degree)
+def wrap180(degree):
+    if -180 <= degree and degree <= 180:
+        return degree
+    
     x = degree
-    a =180
-    p=360
-    return (((2 * a *x/p - p/2)%p)+p)%p - a
+    a = 180
+    p = 360
+    return (((2*a*x/p - p/2)%p)+p)%p - a
 
 def dms_to_dd(deg,min,sec):
     result = deg + min/60 + sec/3600
@@ -103,6 +91,7 @@ def find_intersection_point(lat1,lon1,lat2,lon2,b1,b2):
         teta21 = 2 * math.pi - teta_b
     else:
         teta21 = teta_b
+    
     print("teta12 : ", teta12)
     print("teta21 : ", teta21)
     alfa_1 = teta13 - teta12
@@ -113,9 +102,11 @@ def find_intersection_point(lat1,lon1,lat2,lon2,b1,b2):
 
     if (math.sin(alfa_1) == 0 and math.sin(alfa_2) == 0):
         result_list.append("B")
-        return
+        print("if")
+        return result_list
     
     if (math.sin(alfa_1) * math.sin(alfa_2) < 0) :
+        print("disf")
         result_list.append("[ambigious]")
         return result_list
 
@@ -136,7 +127,9 @@ def find_intersection_point(lat1,lon1,lat2,lon2,b1,b2):
     print("lambda3 ",lambda_3)
     result_lat = radian_to_degree(phi_3)
     result_lon = radian_to_degree(lambda_3)
-    result_lon = (result_lon + 360) % 360
+    print("modsuz result lon : ",result_lon)
+    
+    result_lon = wrap180(result_lon)
     print("lat : ", result_lat)
     print("lon : ", result_lon)
    
@@ -162,20 +155,11 @@ def find_intersection_point(lat1,lon1,lat2,lon2,b1,b2):
     print("result point" , point)
     print("result_list is ",result_list)
     print("---INFO-ends---")
-    #return result_list
+    return result_list
 
+    
 
-lat1 = 34
-lon1 = -122
-lat2 = 57
-lon2 = -171
-b1 = -121
-b2 = -131
-find_intersection_point(lat1,lon1,lat2,lon2,b1,b2)
-
-
-
-
+find_intersection_point(-53,88,-70,-28,150,-48)
 
 
 
