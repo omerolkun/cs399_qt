@@ -6,7 +6,7 @@ from PySide2 import QtWidgets,QtGui
 from ui import Ui_MainWindow
 import math
 import random
-from haver import calculate_midpoint, convert_to_radian, find_bearing, radian_to_degree, dd_to_dms, calculate_distance,final_bearing, calculate_distance_tab2,calculate_azamith_tab2,calculate_final_bearing_tab2,calculate_mid_point_tab2,wrap90_helper,wrap180_helper,find_intersection_point,dms_to_dd
+from haver import calculate_midpoint, convert_to_radian, find_bearing, radian_to_degree, dd_to_dms, calculate_distance,final_bearing, calculate_distance_tab2,calculate_azamith_tab2,calculate_final_bearing_tab2,calculate_mid_point_tab2,find_intersection_point,dms_to_dd
 from dest_and_final_bearing import calculate_destinaion_point, find_destination_point
 from PyQt5.QtWidgets import QMessageBox
 
