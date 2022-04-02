@@ -715,7 +715,7 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
-        self.tabWidget.setCurrentIndex(2)
+        self.tabWidget.setCurrentIndex(0)
 
 
         QMetaObject.connectSlotsByName(MainWindow)
@@ -754,7 +754,7 @@ class Ui_MainWindow(object):
         self.label_27.setText(QCoreApplication.translate("MainWindow", u"Azamith", None))
         self.label_26.setText(QCoreApplication.translate("MainWindow", u"Distance", None))
         self.label_42.setText(QCoreApplication.translate("MainWindow", u"km", None))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), QCoreApplication.translate("MainWindow", u"Tab 1", None))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), QCoreApplication.translate("MainWindow", u"DD Inputs for distance and destination points", None))
         self.label_6.setText(QCoreApplication.translate("MainWindow", u"Latitude", None))
         self.label_7.setText(QCoreApplication.translate("MainWindow", u"Longitude", None))
         self.calculate_button_tab2.setText(QCoreApplication.translate("MainWindow", u"Calculate", None))
@@ -805,7 +805,7 @@ class Ui_MainWindow(object):
         self.label_48.setText(QCoreApplication.translate("MainWindow", u"\u00b0", None))
         self.label_51.setText(QCoreApplication.translate("MainWindow", u"'", None))
         self.label_54.setText(QCoreApplication.translate("MainWindow", u"''", None))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), QCoreApplication.translate("MainWindow", u"Tab 2", None))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), QCoreApplication.translate("MainWindow", u"DMS inputs for distance and destination points", None))
         self.label_55.setText(QCoreApplication.translate("MainWindow", u"Point 1:", None))
         self.label_56.setText(QCoreApplication.translate("MainWindow", u"Point 2:", None))
         self.label_57.setText(QCoreApplication.translate("MainWindow", u"Bearing 1:", None))
@@ -834,6 +834,6 @@ class Ui_MainWindow(object):
         self.label_86.setText(QCoreApplication.translate("MainWindow", u"lat", None))
         self.label_87.setText(QCoreApplication.translate("MainWindow", u"Bearing1:", None))
         self.label_88.setText(QCoreApplication.translate("MainWindow", u"Bearing2:", None))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_3), QCoreApplication.translate("MainWindow", u"Page", None))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_3), QCoreApplication.translate("MainWindow", u"Intersection points", None))
     # retranslateUi
 

@@ -24,11 +24,11 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>2</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="tab">
      <attribute name="title">
-      <string>Tab 1</string>
+      <string>DD Inputs for distance and destination points</string>
      </attribute>
      <widget class="Line" name="line">
       <property name="geometry">
@@ -411,7 +411,7 @@
     </widget>
     <widget class="QWidget" name="tab_2">
      <attribute name="title">
-      <string>Tab 2</string>
+      <string>DMS inputs for distance and destination points</string>
      </attribute>
      <widget class="QWidget" name="verticalLayoutWidget_6">
       <property name="geometry">
@@ -1423,7 +1423,7 @@
     </widget>
     <widget class="QWidget" name="tab_3">
      <attribute name="title">
-      <string>Page</string>
+      <string>Intersection points</string>
      </attribute>
      <widget class="QFrame" name="frame_7">
       <property name="geometry">

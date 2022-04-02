@@ -324,10 +324,7 @@ def make_decimal(point):
 
 
 def calculate_distance(point1, point2):
-    '''p1 = make_decimal(point1)
-    p2 = make_decimal(point2)'''
-
-
+    
     lat1 = point1[0]
     lat2 = point2[0]
     long1 = point1[1]
@@ -340,21 +337,12 @@ def calculate_distance(point1, point2):
     delta_phase = (lat2 - lat1) * math.pi/180 #######
 
     #haversine formula
-    #a = math.pow( math.sin(delta_phase/2),2) + math.cos(phase1) * math.cos(phase2) * math.pow( math.sin(delta_lambda/2),2)
     a = math.sin(delta_phase/2) * math.sin(delta_phase/2) + math.cos(phase1) * math.cos(phase2) * math.sin(delta_lambda/2) *math.sin(delta_lambda/2) 
-    #sqrt_of_a = math.sqrt(a)
-    # c = 2 * atan2(square root of a, square root of 1-a )
-
-    #c = 2 * math.atan2(sqrt_of_a, math.sqrt(1-a))
 
     c = 2 * math.atan2(math.sqrt(a), math.sqrt(1-a))
 
-
     #distance formula is d = Radius of Earth * c 
-
     result = R * c
-    
-    #return result
     return (round(result/1000,4))
 
 
