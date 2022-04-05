@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+from curses import A_ALTCHARSET
 import sys
 from tokenize import Double
 from PySide2 import QtWidgets,QtGui
@@ -278,7 +279,7 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         if lat1 > 90 or lat1 < -90 or lat2 > 90 or lat2 < -90:
             flip = flip + 1
 
-            warning_list.append("Latitudes must be idsfhdfn the range from -90 to 90")
+            warning_list.append("Latitudes must be in the range from -90 to 90")
         if lon1 > 180 or lon1 < -180 or lon2 > 180 or lon2 < -180:
             flip = flip + 1 
             warning_list.append("Longitudes must be in the range from -180 to 180")
@@ -382,7 +383,7 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         mid_lat = result[0]
         mid_lon = result[1]
         
-        result = str(mid_lat[0][0]) +degree_sign + " "+ str(mid_lat[0][1]) + "\'" + str(mid_lat[0][2]) + "\'\' " + str(mid_lat[1]) + "  " + str(mid_lon[0][0]) +degree_sign + " "+ str(mid_lon[0][1]) + "\'" + str(mid_lon[0][2]) + "\'\' " + str(mid_lon[1])
+        result = str(mid_lat[0][0]) +degree_sign + " "+ str(mid_lat[0][1]) + "\'" + str(mid_lat[0][2]) + "\'\' , " + str(mid_lat[1]) + "  " + str(mid_lon[0][0]) +degree_sign + " "+ str(mid_lon[0][1]) + "\'" + str(mid_lon[0][2]) + "\'\' " + str(mid_lon[1])
         self.midpoint_value_label.setText(result)
         
 
@@ -502,6 +503,7 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
 
     def display_azamith_tab2(self):
+        degree_sign = u"\N{DEGREE SIGN}"
 
         lat1_deg = float(self.lat1_deg_lineedit.text())
         lat1_min = float(self.lat1_min_lineedit.text())
@@ -531,7 +533,7 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             warning_list.append("Longitudes must be in the range from 0 to 180")
         if lat1_min > 59 or lat1_min < 0 or lat2_min > 59 or lat2_min < 0:
             flip = flip + 1 
-            warning_list.append("Minutes must be in the range from 0 to 59")
+            warning_list.append("Minuasdastes must be in the range from 0 to 59")
         if lat1_sec > 59 or lat1_sec < 0 or lat2_sec > 59 or lat2_sec < 0:
             flip = flip + 1
             warning_list.append("Seconds must be in the range from 0 to 59")
@@ -540,20 +542,25 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.invalid = True
             for item in warning_list:
                 errorko = errorko + item + "\n"
-            msg = QMessageBox()
-            msg.setWindowTitle("Invalid Input")
-            msg.setIcon(QMessageBox.Critical)
+            #msg = QMessageBox()
+            #msg.setWindowTitle("Invalid Input")
+            #msg.setIcon(QMessageBox.Critical)
 
-            msg.setText(errorko)
-            msg.exec_()
+            #msg.setText(errorko)
+            #msg.exec_()
             return
 
         azamith = calculate_azamith_tab2(lat1_deg, lat1_min,lat1_sec,lon1_deg,lon1_min,lon1_sec,lat2_deg,lat2_min,lat2_sec,lon2_deg,lon2_min,lon2_sec,lat1_pole,lon1_dir,lat2_pole,lon2_dir)
-        self.bearing_value_label.setText(str(azamith))
+        deg = str(azamith[0])
+        minu = str(azamith[1])
+        seco = str(azamith[2])
+        toLabel = deg + " " + degree_sign  + " " + minu + "\' " + seco + " \'\'" 
+        self.bearing_value_label.setText(toLabel)
 
 
 
     def display_final_bearing_tab2(self):
+        degree_sign = u"\N{DEGREE SIGN}"
 
         lat1_deg = float(self.lat1_deg_lineedit.text())
         lat1_min = float(self.lat1_min_lineedit.text())
@@ -590,15 +597,20 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.invalid = True
             for item in warning_list:
                 errorko = errorko + item + "\n"
-            msg = QMessageBox()
-            msg.setWindowTitle("Invalid Input")
-            msg.setIcon(QMessageBox.Critical)
+            #msg = QMessageBox()
+            #msg.setWindowTitle("Invalid Input")
+            #msg.setIcon(QMessageBox.Critical)
 
-            msg.setText(errorko)
-            msg.exec_()
+            #msg.setText(errorko)
+            #msg.exec_()
             return        
         result = calculate_final_bearing_tab2(lat1_deg, lat1_min,lat1_sec,lon1_deg,lon1_min,lon1_sec,lat2_deg,lat2_min,lat2_sec,lon2_deg,lon2_min,lon2_sec,lat1_pole,lon1_dir,lat2_pole,lon2_dir)
-        self.final_bearing_value_tab2_label.setText(str(result))
+        degree = str(result[0])
+        minute = str(result[1])
+        sec = str(result[2])
+        print(type(degree))
+        toLabel = degree + " " + degree_sign + " " + minute + "\' "+sec + " \'\'"
+        self.final_bearing_value_tab2_label.setText(toLabel)
 
     def display_midpoint_tab2(self):
         degree_sign = u"\N{DEGREE SIGN}"
@@ -637,12 +649,12 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             self.invalid = True
             for item in warning_list:
                 errorko = errorko + item + "\n"
-            msg = QMessageBox()
-            msg.setWindowTitle("Invalid Input")
-            msg.setIcon(QMessageBox.Critical)
+           # msg = QMessageBox()
+            #msg.setWindowTitle("Invalid Input")
+            #msg.setIcon(QMessageBox.Critical)
 
-            msg.setText(errorko)
-            msg.exec_()
+            #msg.setText(errorko)
+            #msg.exec_()
             return
         result = calculate_mid_point_tab2(lat1_deg,lat1_min,lat1_sec,lon1_deg,lon1_min,lon1_sec,lat2_deg,lat2_min,lat2_sec,lon2_deg,lon2_min,lon2_sec,lat1_pole,lon1_dir,lat2_pole,lon2_dir)
         lat_res = result[0]
@@ -657,7 +669,8 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         lon_res_sec = lon_res[0][1]
         lon_res_dir = lon_res[1]
 
-        result = str(lat_res_deg) + degree_sign + " "+str(lat_res_min)+"\' "+ str(lat_res_sec)+"\'\' " + lat_res_pol+"  " + str(lon_res_deg)+degree_sign+" " + str(lon_res_min)+"\' " + str(lon_res_sec)+"\'\' " + lon_res_dir
+
+        result = str(lat_res_deg) + degree_sign + " "+str(lat_res_min)+"\' "+ str(lat_res_sec)+"\'\' " + lat_res_pol+",  " + str(lon_res_deg)+degree_sign+" " + str(lon_res_min)+"\' " + str(lon_res_sec)+"\'\' " + lon_res_dir
 
         
     
@@ -666,6 +679,7 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     
 
     def display_endpoint_and_bearing_tab2(self):
+        print("dispaly endpoint end bearin tab")
         degree_sign = u"\N{DEGREE SIGN}"
         lat_deg = float(self.startpoint_lat_deg_lineedit_tab2.text())
         lat_min = float(self.startpoint_lat_min_lineedit_tab2.text())
@@ -682,13 +696,22 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         b_min = float(self.bearing_min_lineedit_tab2.text())
         b_sec = float(self.bearing_sec_lineedit_tab2.text())
         result = calculate_destinaion_point(lat_deg, lat_min,lat_sec, lat_pole,lon_deg,lon_min,lon_sec,lon_dir,distance,b_deg,b_min,b_sec)
-        
+        print("lat deg is ", lat_deg)
         flip = 0
         warning_list = []
-        #check minutes and seconds
-        if lat_min > 59 or lon_min >59:
+        if lat_deg > 90 or lat_deg < 0:
             flip = flip + 1
-        warning_list.append("Minutes must be in 0-59")
+            warning_list.append("Latitudes must be in 0-90")
+        if lon_deg > 180 or lon_deg < 0:
+            flip = flip + 1
+            warning_list.append("Longitudes must be in 0-180")
+        if b_deg > 180 or b_deg < 0:
+            flip = flip + 1
+            warning_list.append("Bearing degree must be in 0-180")
+        #check minutes and seconds
+        if lat_min > 59 or lon_min >59 or b_min > 59:
+            flip = flip + 1
+            warning_list.append("Minutes must be in 0-59")
         
         if lat_sec > 59 or lon_sec > 59 :
             flip = flip + 1
@@ -721,7 +744,7 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
 
 
-        destination_point = str(dest_lag_deg)+degree_sign+" "+str(dest_lag_min)+"\' " + str(dest_lag_sec)+" \'\' " + dest_pole + "  "+str(dest_lon_deg)+degree_sign+" "+str(dest_lon_min)+"\' "+str(dest_lon_sec)+"\'\' " + dest_dir
+        destination_point = str(dest_lag_deg)+degree_sign+" "+str(dest_lag_min)+"\' " + str(dest_lag_sec)+" \'\' " + dest_pole + ", "+str(dest_lon_deg)+degree_sign+" "+str(dest_lon_min)+"\' "+str(dest_lon_sec)+"\'\' " + dest_dir
         fbearing = str(fbearing_deg)+degree_sign + " "+ str(fbearing_min)+"\' "+str(fbearing_sec)+"\'\'"
 
         self.destination_label_value_tab2.setText(destination_point)
