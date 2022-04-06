@@ -40,6 +40,9 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.point2_pole_tab3.addItems(["N","S"])
         self.point2_direction_tab3.addItems(["E","W"])
 
+        self.start_lat_pole_tab1.addItems(["N","S"])
+        self.start_lon_direction_tab1.addItems(["E","W"])
+
         #validator for lat and lon for tab1's inputs 
         lat_validator = QtGui.QDoubleValidator(0,90,4)
         lat_validator.setNotation(QtGui.QDoubleValidator.StandardNotation)
@@ -276,6 +279,22 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         lat2 = float(self.lat2.text())
         lon1 = float(self.lon1.text())
         lon2 = float(self.lon2.text())
+        lat1_pole = self.lat1_pole_tab1.currentText()
+        lon1_direction = self.lon1_direction_tab1.currentText()
+        lat2_pole = self.lat2_pole_tab1.currentText()
+        lon2_direction = self.lon2_direction_tab1.currentText()
+        print("the lat1 pole is ",lat1_pole, "and its type is ",type(lat1_pole))
+        
+        if lat1_pole == "S":
+            lat1 = -1 * lat1
+        if lon1_direction == "W":
+            lon1 = -1 * lon1
+        if lat2_pole == "S":
+            lat2 = -1 * lat2
+        if lon2_direction == "W":
+            lon2 = -1 * lon2
+
+        print("lon1 directiopn is ",lon1_direction)
         point1 = lat1, lon1
         point2 = lat2, lon2
 
@@ -283,11 +302,10 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         warning_list = []
         print("lat1 = ",lat1)
         print("lat2 = ",lat2)
-        if lat1 > 90 or lat1 < 0 or lat2 > 90 or lat2 < 0:
+        if lat1 > abs(90) or lat2 > abs(90) :
             flip = flip + 1
-
             warning_list.append("Latitudes must be in the range from 0 to 90")
-        if lon1 > 180 or lon1 < 0 or lon2 > 180 or lon2 < 0:
+        if lon1 > abs(180) or lon2 > abs(180):
             flip = flip + 1 
             warning_list.append("Longitudes must be in the range from 0 to 180")
         if flip > 0:
@@ -330,11 +348,20 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         
         result = find_bearing(point1,point2)
         #degree min sec
-        result = str(result[0]) + degree_sign + " " + str(result[1]) + "\' " + str(result[2]) + "\'\'" 
+        print("azimuth is ",result)
+        deg = result[0]
+        minute = result[1]
+        sec = result[2]
+        dd_result = dms_to_dd(result[0],result[1],result[2])
+        dd_result = round(dd_result,4)
 
+        #result = str(result[0]) + degree_sign + " " + str(result[1]) + "\' " + str(result[2]) + "\'\'" 
+        #print("type of degree", type(result[0]), "type of min ",type(result[1]), "type of sec ",type(result[2]))
+        
+        #print("deg is ",deg,"min is ", minute,"sec is ",sec)
+        #print("dd result is ",dd_result)
         #set the label
-
-        self.label_value_azamith.setText(result)
+        self.label_value_azamith.setText(str(dd_result))
 
         
     
@@ -358,11 +385,15 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             return
 
         result = final_bearing(point1,point2)
-        
+        deg = result[0]
+        minu = result[1]
+        seco = result[2]
+        dd_result = dms_to_dd(deg,minu,seco)
+        dd_result = round(dd_result,4)
         #degree min sec
         result = str(result[0]) + degree_sign + " " + str(result[1]) + "\' " + str(result[2]) + "\'\'" 
         #set label
-        self.final_bearing_label.setText(result)
+        self.final_bearing_label.setText(str(dd_result))
 
 
     def find_midpoint(self):
@@ -401,20 +432,25 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         start_lon = float(self.start_longitude_lineedit.text())
         distance = float(self.distance_lineEdit.text()) # in km
         azamith  = float(self.bearing_lineEdit.text()) # in dd
-
+        lat_pole = self.start_lat_pole_tab1.currentText()
+        lon_dir = self.start_lon_direction_tab1.currentText()
+        if lat_pole == "S":
+            start_lat = -1 * start_lat
+        if lon_dir == "W":
+            start_lon = -1 * start_lon
         start_point = start_lat , start_lon
         
         flip = 0 
         warning_list = []
-        if start_lat > 90 or start_lat < -90 :
+        if abs(start_lat) > 90 :
             flip = flip + 1
-            warning_list.append("Latitude must be in the range from -90 to 90")
-        if start_lon > 180 or start_lon < -180:
+            warning_list.append("Latitude must be in the range from 0 to 90")
+        if abs(start_lon) > 180 :
             flip = flip + 1 
-            warning_list.append("Longitude must be in the range from -180 to 180")
-        if azamith < -180 or azamith > 180:
+            warning_list.append("Longitude must be in the range from 0 to 180")
+        if abs(azamith) > 180: # ?
             flip = flip + 1
-            warning_list.append("Azamith must be in the range from -180 to 180")
+            warning_list.append("Azamith must be in the range from 0 to 180")
         if distance > 6371 or distance < 0:
             flip = flip + 1
             warning_list.append("Distance must be in the range from 0 to 6371 km")
@@ -448,10 +484,12 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         fbearing_min = x[1][1]
         fbearing_sec = x[1][2]
 
+        dd_fbearing = round(dms_to_dd(fbearing_deg,fbearing_min, fbearing_sec),4)
+        #print("dd bearing is ",dd_fbearing)
         result_destination_point = str(destination_lat_dms[0]) + degree_sign + " " + str(destination_lat_dms[1]) + "\'" + str(destination_lat_dms[2]) + "\'\' " + destination_lat_pole +  ",  " + str(destination_lon_dms[0]) + degree_sign+ " "+str(destination_lon_dms[1]) + "\'" + str(destination_lon_dms[2]) + "\'\' " + destination_lon_direction
-        result_fbearing = str(fbearing_deg) + degree_sign + " " + str(fbearing_min) + "\'" + str(fbearing_sec) + "\'\'"
+        #result_fbearing = str(fbearing_deg) + degree_sign + " " + str(fbearing_min) + "\'" + str(fbearing_sec) + "\'\'"
         self.destination_point_value_label.setText(result_destination_point)
-        self.final_bearing_value_label.setText(result_fbearing)
+        self.final_bearing_value_label.setText(str(dd_fbearing))
 
     #functions for tab2
 
