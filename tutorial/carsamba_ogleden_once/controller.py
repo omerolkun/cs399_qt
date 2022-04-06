@@ -21,6 +21,13 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         
         #set values for comboboxes
+
+        #for tab1
+        self.lat1_pole_tab1.addItems(["N","S"])
+        self.lon1_direction_tab1.addItems(["E","W"])
+        self.lat2_pole_tab1.addItems(["N","S"])
+        self.lon2_direction_tab1.addItems(["E","W"])
+
         self.point1_lat_pole.addItems(["N","S"])
         self.point1_lon_dir.addItems(["E","W"])
         self.point2_lat_pole.addItems(["N","S"])
@@ -34,9 +41,9 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.point2_direction_tab3.addItems(["E","W"])
 
         #validator for lat and lon for tab1's inputs 
-        lat_validator = QtGui.QDoubleValidator(-90,90,4)
+        lat_validator = QtGui.QDoubleValidator(0,90,4)
         lat_validator.setNotation(QtGui.QDoubleValidator.StandardNotation)
-        lon_validator = QtGui.QDoubleValidator(-180,180,8)
+        lon_validator = QtGui.QDoubleValidator(0,180,8)
         lon_validator.setNotation(QtGui.QDoubleValidator.StandardNotation)
         
 
@@ -116,13 +123,13 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
 
         #default values for tab1 
-        self.lat1.setText(str(round(random.uniform(-90,90),3)))
-        self.lon1.setText(str(round(random.uniform(-180,180),3)))
-        self.lat2.setText(str(round(random.uniform(-90,90),3)))
-        self.lon2.setText(str(round(random.uniform(-180,180),3)))
-        self.start_lat_lineedit.setText(str(round(random.uniform(-90,90),3)))
-        self.start_longitude_lineedit.setText(str(round(random.uniform(-180,180),3)))
-        self.bearing_lineEdit.setText(str(round(random.uniform(-180,180),3)))
+        self.lat1.setText(str(round(random.uniform(0,90),3)))
+        self.lon1.setText(str(round(random.uniform(0,180),3)))
+        self.lat2.setText(str(round(random.uniform(0,90),3)))
+        self.lon2.setText(str(round(random.uniform(0,180),3)))
+        self.start_lat_lineedit.setText(str(round(random.uniform(0,90),3)))
+        self.start_longitude_lineedit.setText(str(round(random.uniform(0,180),3)))
+        self.bearing_lineEdit.setText(str(round(random.uniform(0,180),3)))
         self.distance_lineEdit.setText(str(round(random.uniform(0,3400),3)))
 
         #default values for tab2 
@@ -276,13 +283,13 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         warning_list = []
         print("lat1 = ",lat1)
         print("lat2 = ",lat2)
-        if lat1 > 90 or lat1 < -90 or lat2 > 90 or lat2 < -90:
+        if lat1 > 90 or lat1 < 0 or lat2 > 90 or lat2 < 0:
             flip = flip + 1
 
-            warning_list.append("Latitudes must be in the range from -90 to 90")
-        if lon1 > 180 or lon1 < -180 or lon2 > 180 or lon2 < -180:
+            warning_list.append("Latitudes must be in the range from 0 to 90")
+        if lon1 > 180 or lon1 < 0 or lon2 > 180 or lon2 < 0:
             flip = flip + 1 
-            warning_list.append("Longitudes must be in the range from -180 to 180")
+            warning_list.append("Longitudes must be in the range from 0 to 180")
         if flip > 0:
             errorko = ""
             self.invalid = True
@@ -314,9 +321,9 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         point2 = lat2, lon2
         flip = 0 
         warning_list = []
-        if lat1 > 90 or lat1 < -90 or lat2 > 90 or lat2 < -90:
+        if lat1 > 90 or lat1 < 0 or lat2 > 90 or lat2 < -0:
             flip = flip + 1
-        if lon1 > 180 or lon1 < -180 or lon2 > 180 or lon2 < -180:
+        if lon1 > 180 or lon1 < 0 or lon2 > 180 or lon2 < 0:
             flip = flip + 1 
         if flip > 0:
             return    
@@ -343,9 +350,9 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         flip = 0 
         warning_list = []
-        if lat1 > 90 or lat1 < -90 or lat2 > 90 or lat2 < -90:
+        if lat1 > 90 or lat1 < 0 or lat2 > 90 or lat2 < 0:
             flip = flip + 1
-        if lon1 > 180 or lon1 < -180 or lon2 > 180 or lon2 < -180:
+        if lon1 > 180 or lon1 < 0 or lon2 > 180 or lon2 < 0:
             flip = flip + 1 
         if flip > 0:
             return
@@ -369,10 +376,10 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         flip = 0 
         warning_list = []
-        if lat1 > 90 or lat1 < -90 or lat2 > 90 or lat2 < -90:
+        if lat1 > 90 or lat1 < 0 or lat2 > 90 or lat2 < 0:
             flip = flip + 1
             
-        if lon1 > 180 or lon1 < -180 or lon2 > 180 or lon2 < -180:
+        if lon1 > 180 or lon1 < 0 or lon2 > 180 or lon2 < 0:
             flip = flip + 1 
             
         if flip > 0:
@@ -386,7 +393,7 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         result = str(mid_lat[0][0]) +degree_sign + " "+ str(mid_lat[0][1]) + "\'" + str(mid_lat[0][2]) + "\'\' , " + str(mid_lat[1]) + "  " + str(mid_lon[0][0]) +degree_sign + " "+ str(mid_lon[0][1]) + "\'" + str(mid_lon[0][2]) + "\'\' " + str(mid_lon[1])
         self.midpoint_value_label.setText(result)
         
-
+    ### tab1 second part ###
     def calculate_destination_point(self):
       
         degree_sign = u"\N{DEGREE SIGN}"
