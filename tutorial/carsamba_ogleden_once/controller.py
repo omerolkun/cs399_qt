@@ -599,8 +599,8 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         deg = str(azamith[0])
         minu = str(azamith[1])
         seco = str(azamith[2])
-        toLabel = deg + " " + degree_sign  + " " + minu + "\' " + seco + " \'\'" 
-        self.bearing_value_label.setText(toLabel)
+        toLabel =  round(dms_to_dd(deg,minu,seco),4)#   deg + " " + degree_sign  + " " + minu + "\' " + seco + " \'\'" 
+        self.bearing_value_label.setText(str(toLabel))
 
 
 
@@ -654,8 +654,8 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         minute = str(result[1])
         sec = str(result[2])
         print(type(degree))
-        toLabel = degree + " " + degree_sign + " " + minute + "\' "+sec + " \'\'"
-        self.final_bearing_value_tab2_label.setText(toLabel)
+        toLabel = round(dms_to_dd(degree, minute,sec),4) #degree + " " + degree_sign + " " + minute + "\' "+sec + " \'\'"
+        self.final_bearing_value_tab2_label.setText(str(toLabel))
 
     def display_midpoint_tab2(self):
         degree_sign = u"\N{DEGREE SIGN}"
