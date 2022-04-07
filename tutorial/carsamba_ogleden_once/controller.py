@@ -48,6 +48,10 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         lat_validator.setNotation(QtGui.QDoubleValidator.StandardNotation)
         lon_validator = QtGui.QDoubleValidator(0,180,8)
         lon_validator.setNotation(QtGui.QDoubleValidator.StandardNotation)
+        azimuth_validator = QtGui.QDoubleValidator(0,360,4)
+        azimuth_validator.setNotation(QtGui.QDoubleValidator.StandardNotation)
+        distance_input_validator = QtGui.QDoubleValidator(0,6371,4)
+        distance_input_validator.setNotation(QtGui.QDoubleValidator.StandardNotation)
         
 
         
@@ -92,6 +96,8 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.startpoint_lon_deg_lineedit_tab2.setValidator(lon_deg_validator)
         self.startpoint_lon_min_lineedit_tab2.setValidator(min_validator)
         self.startpoint_lon_sec_lineedit_tab2.setValidator(sec_validator)
+        self.bearing_deg_lineedit_tab2.setValidator(azimuth_validator)
+        self.distance_lineedit_tab2.setValidator(distance_input_validator)
 
 
         #set validators for lineedit inputs - tab3 - intersection point
@@ -156,9 +162,8 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.startpoint_lon_min_lineedit_tab2.setText(str(round(random.uniform(0,59))))
         self.startpoint_lon_sec_lineedit_tab2.setText(str(round(random.uniform(0,59),0)))
 
-        self.bearing_deg_lineedit_tab2.setText(str(round(random.uniform(0,90))))
-        self.bearing_min_lineedit_tab2.setText(str(round(random.uniform(0,59))))
-        self.bearing_sec_lineedit_tab2.setText(str(round(random.uniform(0,59),0)))
+        self.bearing_deg_lineedit_tab2.setText(str(round(random.uniform(0,180))))
+
         
         self.distance_lineedit_tab2.setText(str(round(random.uniform(0,3500),0)))
 
@@ -361,7 +366,7 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         #print("deg is ",deg,"min is ", minute,"sec is ",sec)
         #print("dd result is ",dd_result)
         #set the label
-        self.label_value_azamith.setText(str(dd_result))
+        self.label_value_azamith.setText(str(dd_result) + " "+degree_sign)
 
         
     
@@ -393,7 +398,7 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         #degree min sec
         result = str(result[0]) + degree_sign + " " + str(result[1]) + "\' " + str(result[2]) + "\'\'" 
         #set label
-        self.final_bearing_label.setText(str(dd_result))
+        self.final_bearing_label.setText(str(dd_result)+" " + degree_sign)
 
 
     def find_midpoint(self):
@@ -488,8 +493,9 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         #print("dd bearing is ",dd_fbearing)
         result_destination_point = str(destination_lat_dms[0]) + degree_sign + " " + str(destination_lat_dms[1]) + "\'" + str(destination_lat_dms[2]) + "\'\' " + destination_lat_pole +  ",  " + str(destination_lon_dms[0]) + degree_sign+ " "+str(destination_lon_dms[1]) + "\'" + str(destination_lon_dms[2]) + "\'\' " + destination_lon_direction
         #result_fbearing = str(fbearing_deg) + degree_sign + " " + str(fbearing_min) + "\'" + str(fbearing_sec) + "\'\'"
+        to_bearing_label = str(dd_fbearing)+" " + degree_sign
         self.destination_point_value_label.setText(result_destination_point)
-        self.final_bearing_value_label.setText(str(dd_fbearing))
+        self.final_bearing_value_label.setText(to_bearing_label)
 
     #functions for tab2
 
@@ -737,9 +743,11 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         distance = float(self.distance_lineedit_tab2.text())
         
-        b_deg = float(self.bearing_deg_lineedit_tab2.text())
-        b_min = float(self.bearing_min_lineedit_tab2.text())
-        b_sec = float(self.bearing_sec_lineedit_tab2.text())
+        dd_input_bearing = float(self.bearing_deg_lineedit_tab2.text())
+        dms_input_bearing = dd_to_dms(dd_input_bearing)
+        b_deg = dms_input_bearing[0]
+        b_min = dms_input_bearing[1]
+        b_sec = dms_input_bearing[2]
         result = calculate_destinaion_point(lat_deg, lat_min,lat_sec, lat_pole,lon_deg,lon_min,lon_sec,lon_dir,distance,b_deg,b_min,b_sec)
         print("lat deg is ", lat_deg)
         flip = 0
@@ -750,9 +758,9 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         if lon_deg > 180 or lon_deg < 0:
             flip = flip + 1
             warning_list.append("Longitudes must be in 0-180")
-        if b_deg > 180 or b_deg < 0:
+        if b_deg > 360 or b_deg < 0:
             flip = flip + 1
-            warning_list.append("Bearing degree must be in 0-180")
+            warning_list.append("Bearing degree must be in 0-360")
         #check minutes and seconds
         if lat_min > 59 or lon_min >59 or b_min > 59:
             flip = flip + 1
@@ -761,7 +769,9 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         if lat_sec > 59 or lon_sec > 59 :
             flip = flip + 1
             warning_list.append("Seconds must be in 0-59")
-        
+        if distance > 6370:
+            flip = flip + 1
+            warning_list.append("Distance must be in 0-6371")
         if flip > 0:
             errorko = ""
             self.invalid = True
@@ -790,10 +800,9 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
 
         destination_point = str(dest_lag_deg)+degree_sign+" "+str(dest_lag_min)+"\' " + str(dest_lag_sec)+" \'\' " + dest_pole + ", "+str(dest_lon_deg)+degree_sign+" "+str(dest_lon_min)+"\' "+str(dest_lon_sec)+"\'\' " + dest_dir
-        fbearing = str(fbearing_deg)+degree_sign + " "+ str(fbearing_min)+"\' "+str(fbearing_sec)+"\'\'"
-
+        fbearing = round(dms_to_dd(fbearing_deg,fbearing_min,fbearing_sec),4)
         self.destination_label_value_tab2.setText(destination_point)
-        self.final_bearing_value_label_lab2.setText(fbearing)
+        self.final_bearing_value_label_lab2.setText(str(fbearing))
 
 
     
