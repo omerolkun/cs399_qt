@@ -43,6 +43,11 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.start_lat_pole_tab1.addItems(["N","S"])
         self.start_lon_direction_tab1.addItems(["E","W"])
 
+        #for tab3 comboboxes
+        self.lat1_pole_tab3.addItems(["N","S"])
+        self.lon1_tab3_dir.addItems(["E","W"])
+        self.lat2_pole_tab3.addItems(["N","S"])
+        self.lon2_dir_tab3.addItems(["E","W"])
         #validator for lat and lon for tab1's inputs 
         lat_validator = QtGui.QDoubleValidator(0,90,4)
         lat_validator.setNotation(QtGui.QDoubleValidator.StandardNotation)
@@ -302,6 +307,7 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         print("lon1 directiopn is ",lon1_direction)
         point1 = lat1, lon1
         point2 = lat2, lon2
+        print("for distance, point1 is",point1, "point2 is ",point2)
 
         flip = 0 
         warning_list = []
@@ -338,15 +344,30 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         lat2 = float(self.lat2.text())
         lon1 = float(self.lon1.text())
         lon2 = float(self.lon2.text())
+        lat1_pole = self.lat1_pole_tab1.currentText()
+        lon1_dir = self.lon1_direction_tab1.currentText()
+        lat2_pole = self.lat2_pole_tab1.currentText()
+        lon2_dir = self.lon2_direction_tab1.currentText()
+        if lat1_pole == "S":
+            lat1 = -1 * lat1
+        if lon1_dir == "W":
+            lon1 = -1 * lon1
+        if lat2_pole == "S":
+            lat2 = -1 * lat2 
+        if lon2_dir == "W":
+            lon2 = -1 * lon2
 
-
+        
         point1 = lat1, lon1
         point2 = lat2, lon2
+
+        print("for azimuth, point1 is",point1, "point2 is ",point2)
+
         flip = 0 
         warning_list = []
-        if lat1 > 90 or lat1 < 0 or lat2 > 90 or lat2 < -0:
+        if abs(lat1) > 90 or  abs(lat2) > 90 :
             flip = flip + 1
-        if lon1 > 180 or lon1 < 0 or lon2 > 180 or lon2 < 0:
+        if abs(lon1) > 180 or abs(lon2) > 180:
             flip = flip + 1 
         if flip > 0:
             return    
@@ -376,15 +397,29 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         lon1 = float(self.lon1.text())
         lat2 = float(self.lat2.text())
         lon2 = float(self.lon2.text())
+        lat1_pole = self.lat1_pole_tab1.currentText()
+        lon1_dir = self.lon1_direction_tab1.currentText()
+        lat2_pole = self.lat2_pole_tab1.currentText()
+        lon2_dir = self.lon2_direction_tab1.currentText()
+        if lat1_pole == "S":
+            lat1 = -1 * lat1
+        if lon1_dir == "W":
+            lon1 = -1 * lon1
+        if lat2_pole == "S":
+            lat2 = -1 * lat2 
+        if lon2_dir == "W":
+            lon2 = -1 * lon2
 
         point1 = lat1, lon1
         point2 = lat2, lon2
+        print("for final bearing point, point1 is",point1, "point2 is ",point2)
+
 
         flip = 0 
         warning_list = []
-        if lat1 > 90 or lat1 < 0 or lat2 > 90 or lat2 < 0:
+        if abs(lat1) > 90 or abs(lat2) > 90:
             flip = flip + 1
-        if lon1 > 180 or lon1 < 0 or lon2 > 180 or lon2 < 0:
+        if abs(lon1) > 180 or abs(lon2) > 180:
             flip = flip + 1 
         if flip > 0:
             return
@@ -407,8 +442,23 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         lon1 = float(self.lon1.text())
         lat2 = float(self.lat2.text())
         lon2 = float(self.lon2.text())
+        lat1_pole = self.lat1_pole_tab1.currentText()
+        lon1_dir = self.lon1_direction_tab1.currentText()
+        lat2_pole = self.lat2_pole_tab1.currentText()
+        lon2_dir = self.lon2_direction_tab1.currentText()
+        if lat1_pole == "S":
+            lat1 = -1 * lat1
+        if lon1_dir == "W":
+            lon1 = -1 * lon1
+        if lat2_pole == "S":
+            lat2 = -1 * lat2 
+        if lon2_dir == "W":
+            lon2 = -1 * lon2
+
+
         point1 = lat1, lon1
         point2 = lat2, lon2
+        print("for mid point, point1 is",point1, "point2 is ",point2)
 
         flip = 0 
         warning_list = []
@@ -606,7 +656,7 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         minu = str(azamith[1])
         seco = str(azamith[2])
         toLabel =  round(dms_to_dd(deg,minu,seco),4)#   deg + " " + degree_sign  + " " + minu + "\' " + seco + " \'\'" 
-        self.bearing_value_label.setText(str(toLabel))
+        self.bearing_value_label.setText(str(toLabel) + " " + degree_sign)
 
 
 
@@ -661,7 +711,7 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         sec = str(result[2])
         print(type(degree))
         toLabel = round(dms_to_dd(degree, minute,sec),4) #degree + " " + degree_sign + " " + minute + "\' "+sec + " \'\'"
-        self.final_bearing_value_tab2_label.setText(str(toLabel))
+        self.final_bearing_value_tab2_label.setText(str(toLabel) + " " + degree_sign)
 
     def display_midpoint_tab2(self):
         degree_sign = u"\N{DEGREE SIGN}"
@@ -802,7 +852,7 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         destination_point = str(dest_lag_deg)+degree_sign+" "+str(dest_lag_min)+"\' " + str(dest_lag_sec)+" \'\' " + dest_pole + ", "+str(dest_lon_deg)+degree_sign+" "+str(dest_lon_min)+"\' "+str(dest_lon_sec)+"\'\' " + dest_dir
         fbearing = round(dms_to_dd(fbearing_deg,fbearing_min,fbearing_sec),4)
         self.destination_label_value_tab2.setText(destination_point)
-        self.final_bearing_value_label_lab2.setText(str(fbearing))
+        self.final_bearing_value_label_lab2.setText(str(fbearing) + " " + degree_sign)
 
 
     
@@ -816,14 +866,25 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         lon2 = float(self.lon2_dd_tab3.text())
         b1 = float (self.bearing1_dd_tab3.text())
         b2 = float(self.bearing2_dd_tab3.text())
+        lat1_pole = str(self.lat1_pole_tab3.currentText())
+        lon1_dir = str(self.lon1_tab3_dir.currentText())
+        lat2_pole = str(self.lat2_pole_tab3.currentText())
+        lon2_dir = str(self.lon2_dir_tab3.currentText())
 
-
+        if lat1_pole == "S":
+            lat1_pole = -1 * lat1_pole
+        if lon1_dir == "W":
+            lon1_pole = -1 * lon1_pole
+        if lat2_pole == "S":
+            lat2_pole = -1* lat2_pole
+        if lon2_dir == "W":
+            lon2_dir = -1 * lon2_dir
         flip = 0 
         warning_list = []
-        if lat1 > 90 or lat2 > 90 or lat1 < -90 or lat2 < -90:
+        if abs(lat1) > 90 or abs(lat2) > 90:
             flip = flip + 1
             warning_list.append("Latitudes must be in the range from  -90  to 90")
-        if lon1 > 180 or lon2 > 180 or lon1 < -180 or lon1 < -180:
+        if abs(lon1) > 180 or abs(lon2) > 180:
             flip = flip + 1 
             warning_list.append("Longitudes must be in the range from -180 to 180")
         if b1 > 180 or b1 <-180 or b2 > 180 or b2 < -180:
@@ -843,7 +904,7 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             return
 
 
-
+        
         result = find_intersection_point(lat1,lon1,lat2,lon2,b1,b2)
         print(len(result))
         if len(result) == 2:
