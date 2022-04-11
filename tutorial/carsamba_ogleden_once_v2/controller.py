@@ -49,13 +49,13 @@ class ModiWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.lat2_pole_tab3.addItems(["N","S"])
         self.lon2_dir_tab3.addItems(["E","W"])
         #validator for lat and lon for tab1's inputs 
-        lat_validator = QtGui.QDoubleValidator(0,90,4)
+        lat_validator = QtGui.QDoubleValidator(0,90,9)
         lat_validator.setNotation(QtGui.QDoubleValidator.StandardNotation)
-        lon_validator = QtGui.QDoubleValidator(0,180,8)
+        lon_validator = QtGui.QDoubleValidator(0,180,9)
         lon_validator.setNotation(QtGui.QDoubleValidator.StandardNotation)
-        azimuth_validator = QtGui.QDoubleValidator(0,360,4)
+        azimuth_validator = QtGui.QDoubleValidator(0,360,9)
         azimuth_validator.setNotation(QtGui.QDoubleValidator.StandardNotation)
-        distance_input_validator = QtGui.QDoubleValidator(0,6371,4)
+        distance_input_validator = QtGui.QDoubleValidator(0,6371,9)
         distance_input_validator.setNotation(QtGui.QDoubleValidator.StandardNotation)
         
 
